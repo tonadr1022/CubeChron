@@ -1,3 +1,4 @@
+import { graphql } from "@/__generated__";
 import { gql } from "@apollo/client";
 
 // gql`
@@ -34,14 +35,6 @@ gql`
   mutation deleteSolve($id: String!) {
     deleteSolve(id: $id) {
       id
-      createdAt
-      cubeSessionId
-      scramble
-      cubeType
-      notes
-      dnf
-      plusTwo
-      duration
     }
   }
 `;
@@ -57,6 +50,18 @@ gql`
       notes
       plusTwo
       scramble
+    }
+  }
+`;
+
+gql`
+  mutation updateSetting($input: UpdateSettingInput!) {
+    updateSetting(input: $input) {
+      id
+      focusMode
+      cubeType
+      cubeDisplayDimension
+      cubeSessionId
     }
   }
 `;

@@ -13,6 +13,7 @@ import {
   SolvesQueryDocument,
   UpdateSolveDocument,
 } from "@/__generated__/graphql";
+import { useDeleteSolve } from "@/hooks/solves/useDeleteSolve";
 
 gql`
   fragment SolveTable_Solve on Solve {
@@ -27,16 +28,14 @@ type Props = {
 };
 
 const SolveTable: React.FC<Props> = ({ solves }: Props) => {
-  const [deleteSolve] = useMutation(DeleteSolveDocument, {
-    refetchQueries: [{ query: SolvesQueryDocument }],
-  });
+  const deleteSolve = useDeleteSolve();
   const [updateSolve] = useMutation(UpdateSolveDocument, {
     refetchQueries: [{ query: SolvesQueryDocument }],
   });
   // const dispatch = useAppDispatch();
   const onSolveDelete = useCallback(
     (solveId: string) => {
-      deleteSolve({ variables: { id: solveId } });
+      deleteSolve(solveId);
     },
     [deleteSolve]
   );

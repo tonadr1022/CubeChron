@@ -20,6 +20,7 @@ gql`
     setting {
       cubeType
       cubeSessionId
+      cubeDisplayDimension
       focusMode
       id
     }

@@ -1,12 +1,14 @@
 import "@/styles/globals.css";
 import { ApolloProvider } from "@apollo/client";
-import client from "../lib/apollo-client";
+import { useApollo } from "../lib/apollo-client";
 import type { AppProps } from "next/app";
 import { SessionProvider, useSession } from "next-auth/react";
 import { Provider } from "react-redux";
 import { store } from "@/redux/store";
+import { useEffect } from "react";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+  const client = useApollo(pageProps);
   return (
     <SessionProvider session={session}>
       <ApolloProvider client={client}>

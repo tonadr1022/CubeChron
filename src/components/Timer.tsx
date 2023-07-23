@@ -9,26 +9,21 @@ import {
   setTimerTimeoutId,
   setTimerIntervalId,
 } from "@/redux/slices/timerSlice";
-import { gql, useApolloClient, useMutation, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import DurationDisplay from "./DurationDisplay";
-import { Setting } from "@prisma/client";
 import { nanoid } from "@reduxjs/toolkit";
-import { redirect } from "next/navigation";
-import { selectUser } from "@/redux/slices/userSlice";
 import {
-  CreateSolveDocument,
   CreateSolveInput,
   SettingQueryDocument,
-  SolvesQueryDocument,
 } from "@/__generated__/graphql";
+import { useCreateSolve } from "@/hooks/solves/useCreateSolve";
 
 const Timer = () => {
-  const userId = useAppSelector(selectUser);
-
   const { timerState, timerTimeoutId, timerIntervalId } = useAppSelector(
     (state) => state.timer
   );
   const { data, loading, error } = useQuery(SettingQueryDocument);
+  console.log(data);
   const cubeSessionId = data?.setting?.cubeSessionId!;
   const cubeType = data?.setting?.cubeType!;
 
@@ -38,9 +33,8 @@ const Timer = () => {
   const dispatch = useAppDispatch();
 
   const [duration, setDuration] = useState<number>(0);
-  const [createSolve] = useMutation(CreateSolveDocument, {
-    refetchQueries: [{ query: SolvesQueryDocument }],
-  });
+  const createSolve = useCreateSolve();
+
   const updateTimer = (start: number) => {
     const id = setInterval(() => {
       setDuration(Date.now() - start);
@@ -62,21 +56,7 @@ const Timer = () => {
         plusTwo: false,
         scramble: currentScramble,
       };
-      createSolve({
-        variables: { input },
-        optimisticResponse(vars) {
-          return {
-            __typename: "Mutation",
-            createSolve: {
-              __typename: "Solve",
-              ...input,
-              notes: null,
-              createdAt: new Date().toISOString(),
-            },
-          };
-        },
-      });
-      dispatch(setTimerState("stalling"));
+      createSolve(input), dispatch(setTimerState("stalling"));
       dispatch(
         setCurrentScramble(
           getScramble({

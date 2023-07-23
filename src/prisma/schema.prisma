@@ -7,14 +7,15 @@ generator pothos {
   prismaUtils = true
 }
 
-// datasource db {
-//   provider = "postgresql"
-//   url      = env("DATABASE_URL")
-// }
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
+
+// datasource db {
+//   provider = "sqlite"
+//   url      = "file:./dev.db"
+// }
 
 model Account {
   id                 String    @id @default(cuid())
@@ -99,14 +100,15 @@ model Solve {
 }
 
 model Setting {
-  id            String    @id @default(nanoid())
-  createdAt     DateTime? @default(now())
-  updatedAt     DateTime? @updatedAt
-  userId        String?   @unique
-  focusMode     Boolean   @default(false)
-  cubeType      String    @default("333")
-  cubeSessionId String?
-  user          User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                   String    @id @default(nanoid())
+  createdAt            DateTime? @default(now())
+  updatedAt            DateTime? @updatedAt
+  userId               String?   @unique
+  focusMode            Boolean   @default(false)
+  cubeType             String    @default("333")
+  cubeDisplayDimension String    @default("2")
+  cubeSessionId        String?
+  user                 User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }

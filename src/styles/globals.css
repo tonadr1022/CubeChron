@@ -25,3 +25,10 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+scramble-display {
+  width: 320px;
+  height: 240px;
+  resize: both;
+  overflow: hidden;
+}

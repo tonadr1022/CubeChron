@@ -9,8 +9,10 @@ import { useQuery } from "@apollo/client";
 import Loading from "./Loading";
 import { User } from "@/__generated__/graphql";
 import { setUser } from "@/redux/slices/userSlice";
+
 const Scramble = () => {
   const { currentScramble } = useAppSelector((state) => state.scramble);
+  const { scrambleType } = useAppSelector((state) => state.scramble);
   const dispatch = useAppDispatch();
   // dispatch(setUser(user));
   const scramble = useAppSelector((state) => state.scramble.currentScramble);
@@ -20,19 +22,15 @@ const Scramble = () => {
     if (currentScramble === "") {
       const generateScramble = () => {
         const initialScramble = getScramble({
-          scrambleType: "333",
+          scrambleType,
         });
         dispatch(setCurrentScramble(initialScramble));
       };
       generateScramble();
     }
-  }, [dispatch, currentScramble]);
+  }, [dispatch, currentScramble, scrambleType]);
 
   return scramble ? <ScrambleDisplay scramble={scramble} /> : <Loading />;
-
-  {
-    /* <div>{data.getUserByEmail.email}</div> */
-  }
 };
 
 export default Scramble;

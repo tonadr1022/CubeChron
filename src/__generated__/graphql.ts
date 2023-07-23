@@ -90,7 +90,7 @@ export type MutationUpdateCubeSessionArgs = {
 
 
 export type MutationUpdateSettingArgs = {
-  input: SettingUpdateInput;
+  input: UpdateSettingInput;
 };
 
 
@@ -115,6 +115,7 @@ export type QuerySolveArgs = {
 export type Setting = {
   __typename?: 'Setting';
   createdAt?: Maybe<Scalars['DateTime']['output']>;
+  cubeDisplayDimension: Scalars['String']['output'];
   cubeSessionId?: Maybe<Scalars['String']['output']>;
   cubeType?: Maybe<Scalars['String']['output']>;
   focusMode?: Maybe<Scalars['Boolean']['output']>;
@@ -122,14 +123,6 @@ export type Setting = {
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
   user: User;
   userId?: Maybe<Scalars['String']['output']>;
-};
-
-export type SettingUpdateInput = {
-  cubeSessionId?: InputMaybe<Scalars['String']['input']>;
-  cubeType?: InputMaybe<Scalars['String']['input']>;
-  focusMode?: InputMaybe<Scalars['Boolean']['input']>;
-  id: Scalars['String']['input'];
-  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Solve = {
@@ -146,6 +139,15 @@ export type Solve = {
   scramble?: Maybe<Scalars['String']['output']>;
   user: User;
   userId?: Maybe<Scalars['String']['output']>;
+};
+
+export type UpdateSettingInput = {
+  cubeDisplayDimension?: InputMaybe<Scalars['String']['input']>;
+  cubeSessionId?: InputMaybe<Scalars['String']['input']>;
+  cubeType?: InputMaybe<Scalars['String']['input']>;
+  focusMode?: InputMaybe<Scalars['Boolean']['input']>;
+  id: Scalars['String']['input'];
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateSolveInput = {
@@ -187,7 +189,7 @@ export type DeleteSolveMutationVariables = Exact<{
 }>;
 
 
-export type DeleteSolveMutation = { __typename?: 'Mutation', deleteSolve: { __typename?: 'Solve', id: string, createdAt?: any | null, cubeSessionId?: string | null, scramble?: string | null, cubeType?: string | null, notes?: string | null, dnf?: boolean | null, plusTwo?: boolean | null, duration: number } };
+export type DeleteSolveMutation = { __typename?: 'Mutation', deleteSolve: { __typename?: 'Solve', id: string } };
 
 export type UpdateSolveMutationVariables = Exact<{
   id: Scalars['String']['input'];
@@ -197,6 +199,13 @@ export type UpdateSolveMutationVariables = Exact<{
 
 export type UpdateSolveMutation = { __typename?: 'Mutation', updateSolve: { __typename?: 'Solve', createdAt?: any | null, cubeSessionId?: string | null, cubeType?: string | null, dnf?: boolean | null, duration: number, id: string, notes?: string | null, plusTwo?: boolean | null, scramble?: string | null } };
 
+export type UpdateSettingMutationVariables = Exact<{
+  input: UpdateSettingInput;
+}>;
+
+
+export type UpdateSettingMutation = { __typename?: 'Mutation', updateSetting: { __typename?: 'Setting', id: string, focusMode?: boolean | null, cubeType?: string | null, cubeDisplayDimension: string, cubeSessionId?: string | null } };
+
 export type SolvesQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -205,11 +214,12 @@ export type SolvesQueryQuery = { __typename?: 'Query', solves: Array<{ __typenam
 export type SettingQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SettingQueryQuery = { __typename?: 'Query', setting: { __typename?: 'Setting', cubeType?: string | null, cubeSessionId?: string | null, focusMode?: boolean | null, id: string } };
+export type SettingQueryQuery = { __typename?: 'Query', setting: { __typename?: 'Setting', cubeType?: string | null, cubeSessionId?: string | null, cubeDisplayDimension: string, focusMode?: boolean | null, id: string } };
 
 export const SolveTable_SolveFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"SolveTable_Solve"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Solve"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"duration"}},{"kind":"Field","name":{"kind":"Name","value":"dnf"}},{"kind":"Field","name":{"kind":"Name","value":"plusTwo"}}]}}]} as unknown as DocumentNode<SolveTable_SolveFragment, unknown>;
 export const CreateSolveDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"createSolve"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateSolveInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createSolve"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"cubeSessionId"}},{"kind":"Field","name":{"kind":"Name","value":"cubeType"}},{"kind":"Field","name":{"kind":"Name","value":"dnf"}},{"kind":"Field","name":{"kind":"Name","value":"duration"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"notes"}},{"kind":"Field","name":{"kind":"Name","value":"plusTwo"}},{"kind":"Field","name":{"kind":"Name","value":"scramble"}}]}}]}}]} as unknown as DocumentNode<CreateSolveMutation, CreateSolveMutationVariables>;
-export const DeleteSolveDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"deleteSolve"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteSolve"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"cubeSessionId"}},{"kind":"Field","name":{"kind":"Name","value":"scramble"}},{"kind":"Field","name":{"kind":"Name","value":"cubeType"}},{"kind":"Field","name":{"kind":"Name","value":"notes"}},{"kind":"Field","name":{"kind":"Name","value":"dnf"}},{"kind":"Field","name":{"kind":"Name","value":"plusTwo"}},{"kind":"Field","name":{"kind":"Name","value":"duration"}}]}}]}}]} as unknown as DocumentNode<DeleteSolveMutation, DeleteSolveMutationVariables>;
+export const DeleteSolveDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"deleteSolve"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteSolve"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteSolveMutation, DeleteSolveMutationVariables>;
 export const UpdateSolveDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"updateSolve"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateSolveInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateSolve"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"cubeSessionId"}},{"kind":"Field","name":{"kind":"Name","value":"cubeType"}},{"kind":"Field","name":{"kind":"Name","value":"dnf"}},{"kind":"Field","name":{"kind":"Name","value":"duration"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"notes"}},{"kind":"Field","name":{"kind":"Name","value":"plusTwo"}},{"kind":"Field","name":{"kind":"Name","value":"scramble"}}]}}]}}]} as unknown as DocumentNode<UpdateSolveMutation, UpdateSolveMutationVariables>;
+export const UpdateSettingDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"updateSetting"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateSettingInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateSetting"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"focusMode"}},{"kind":"Field","name":{"kind":"Name","value":"cubeType"}},{"kind":"Field","name":{"kind":"Name","value":"cubeDisplayDimension"}},{"kind":"Field","name":{"kind":"Name","value":"cubeSessionId"}}]}}]}}]} as unknown as DocumentNode<UpdateSettingMutation, UpdateSettingMutationVariables>;
 export const SolvesQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SolvesQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"solves"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"cubeSessionId"}},{"kind":"Field","name":{"kind":"Name","value":"cubeType"}},{"kind":"Field","name":{"kind":"Name","value":"dnf"}},{"kind":"Field","name":{"kind":"Name","value":"duration"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"notes"}},{"kind":"Field","name":{"kind":"Name","value":"plusTwo"}},{"kind":"Field","name":{"kind":"Name","value":"scramble"}}]}}]}}]} as unknown as DocumentNode<SolvesQueryQuery, SolvesQueryQueryVariables>;
-export const SettingQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SettingQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"setting"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cubeType"}},{"kind":"Field","name":{"kind":"Name","value":"cubeSessionId"}},{"kind":"Field","name":{"kind":"Name","value":"focusMode"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<SettingQueryQuery, SettingQueryQueryVariables>;
+export const SettingQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SettingQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"setting"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cubeType"}},{"kind":"Field","name":{"kind":"Name","value":"cubeSessionId"}},{"kind":"Field","name":{"kind":"Name","value":"cubeDisplayDimension"}},{"kind":"Field","name":{"kind":"Name","value":"focusMode"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<SettingQueryQuery, SettingQueryQueryVariables>;

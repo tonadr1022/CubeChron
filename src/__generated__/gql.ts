@@ -15,10 +15,11 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
     "\n  fragment SolveTable_Solve on Solve {\n    id\n    duration\n    dnf\n    plusTwo\n  }\n": types.SolveTable_SolveFragmentDoc,
     "\n  mutation createSolve($input: CreateSolveInput!) {\n    createSolve(input: $input) {\n      createdAt\n      cubeSessionId\n      cubeType\n      dnf\n      duration\n      id\n      notes\n      plusTwo\n      scramble\n    }\n  }\n": types.CreateSolveDocument,
-    "\n  mutation deleteSolve($id: String!) {\n    deleteSolve(id: $id) {\n      id\n      createdAt\n      cubeSessionId\n      scramble\n      cubeType\n      notes\n      dnf\n      plusTwo\n      duration\n    }\n  }\n": types.DeleteSolveDocument,
+    "\n  mutation deleteSolve($id: String!) {\n    deleteSolve(id: $id) {\n      id\n    }\n  }\n": types.DeleteSolveDocument,
     "\n  mutation updateSolve($id: String!, $input: UpdateSolveInput!) {\n    updateSolve(id: $id, input: $input) {\n      createdAt\n      cubeSessionId\n      cubeType\n      dnf\n      duration\n      id\n      notes\n      plusTwo\n      scramble\n    }\n  }\n": types.UpdateSolveDocument,
+    "\n  mutation updateSetting($input: UpdateSettingInput!) {\n    updateSetting(input: $input) {\n      id\n      focusMode\n      cubeType\n      cubeDisplayDimension\n      cubeSessionId\n    }\n  }\n": types.UpdateSettingDocument,
     "\n  query SolvesQuery {\n    solves {\n      createdAt\n      cubeSessionId\n      cubeType\n      dnf\n      duration\n      id\n      notes\n      plusTwo\n      scramble\n    }\n  }\n": types.SolvesQueryDocument,
-    "\n  query SettingQuery {\n    setting {\n      cubeType\n      cubeSessionId\n      focusMode\n      id\n    }\n  }\n": types.SettingQueryDocument,
+    "\n  query SettingQuery {\n    setting {\n      cubeType\n      cubeSessionId\n      cubeDisplayDimension\n      focusMode\n      id\n    }\n  }\n": types.SettingQueryDocument,
 };
 
 /**
@@ -46,7 +47,7 @@ export function graphql(source: "\n  mutation createSolve($input: CreateSolveInp
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation deleteSolve($id: String!) {\n    deleteSolve(id: $id) {\n      id\n      createdAt\n      cubeSessionId\n      scramble\n      cubeType\n      notes\n      dnf\n      plusTwo\n      duration\n    }\n  }\n"): (typeof documents)["\n  mutation deleteSolve($id: String!) {\n    deleteSolve(id: $id) {\n      id\n      createdAt\n      cubeSessionId\n      scramble\n      cubeType\n      notes\n      dnf\n      plusTwo\n      duration\n    }\n  }\n"];
+export function graphql(source: "\n  mutation deleteSolve($id: String!) {\n    deleteSolve(id: $id) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation deleteSolve($id: String!) {\n    deleteSolve(id: $id) {\n      id\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -54,11 +55,15 @@ export function graphql(source: "\n  mutation updateSolve($id: String!, $input: 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  mutation updateSetting($input: UpdateSettingInput!) {\n    updateSetting(input: $input) {\n      id\n      focusMode\n      cubeType\n      cubeDisplayDimension\n      cubeSessionId\n    }\n  }\n"): (typeof documents)["\n  mutation updateSetting($input: UpdateSettingInput!) {\n    updateSetting(input: $input) {\n      id\n      focusMode\n      cubeType\n      cubeDisplayDimension\n      cubeSessionId\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n  query SolvesQuery {\n    solves {\n      createdAt\n      cubeSessionId\n      cubeType\n      dnf\n      duration\n      id\n      notes\n      plusTwo\n      scramble\n    }\n  }\n"): (typeof documents)["\n  query SolvesQuery {\n    solves {\n      createdAt\n      cubeSessionId\n      cubeType\n      dnf\n      duration\n      id\n      notes\n      plusTwo\n      scramble\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query SettingQuery {\n    setting {\n      cubeType\n      cubeSessionId\n      focusMode\n      id\n    }\n  }\n"): (typeof documents)["\n  query SettingQuery {\n    setting {\n      cubeType\n      cubeSessionId\n      focusMode\n      id\n    }\n  }\n"];
+export function graphql(source: "\n  query SettingQuery {\n    setting {\n      cubeType\n      cubeSessionId\n      cubeDisplayDimension\n      focusMode\n      id\n    }\n  }\n"): (typeof documents)["\n  query SettingQuery {\n    setting {\n      cubeType\n      cubeSessionId\n      cubeDisplayDimension\n      focusMode\n      id\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

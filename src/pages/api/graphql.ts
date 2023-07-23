@@ -72,6 +72,7 @@ builder.prismaObject("Setting", {
     userId: t.exposeString("userId", { nullable: true }),
     focusMode: t.exposeBoolean("focusMode", { nullable: true }),
     cubeType: t.exposeString("cubeType", { nullable: true }),
+    cubeDisplayDimension: t.exposeString("cubeDisplayDimension"),
     cubeSessionId: t.exposeString("cubeSessionId", { nullable: true }),
     user: t.relation("user"),
   }),
@@ -192,12 +193,13 @@ export const CubeSessionUpdateInput = builder.inputType(
   }
 );
 
-export const SettingUpdateInput = builder.inputType("SettingUpdateInput", {
+export const UpdateSettingInput = builder.inputType("UpdateSettingInput", {
   fields: (t) => ({
     id: t.string({ required: true }),
     userId: t.string(),
     focusMode: t.boolean(),
     cubeType: t.string(),
+    cubeDisplayDimension: t.string(),
     cubeSessionId: t.string(),
   }),
 });
@@ -317,18 +319,20 @@ builder.mutationType({
     updateSetting: t.prismaField({
       type: "Setting",
       args: {
-        input: t.arg({ type: SettingUpdateInput, required: true }),
+        input: t.arg({ type: UpdateSettingInput, required: true }),
       },
-      resolve: (query, __, args, ctx) => {
+      resolve: async (query, __, args, ctx) => {
         const { id, ...data } = args.input;
         const updateData = Object.fromEntries(
           Object.entries(data).filter(([_, value]) => value !== undefined)
         );
-        return prisma.setting.update({
+        const setting = await prisma.setting.update({
           ...query,
           where: { id: id },
           data: { ...updateData },
         });
+        console.log({ setting });
+        return setting;
       },
     }),
   }),

@@ -2,8 +2,10 @@ import { FormEvent, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 export default function Register() {
+  const router = useRouter();
   const [data, setData] = useState({
     name: "",
     email: "",
@@ -14,7 +16,7 @@ export default function Register() {
     e.preventDefault();
     axios
       .post("/api/register", data)
-      .then(() => toast.success("User has been registered!"))
+      .then(() => router.push("/login"))
       .catch(() => toast.error("Something went wrong!"));
   };
 
