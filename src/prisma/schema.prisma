@@ -2,6 +2,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator pothos {
+  provider    = "prisma-pothos-types"
+  prismaUtils = true
+}
+
 // datasource db {
 //   provider = "postgresql"
 //   url      = env("DATABASE_URL")
@@ -63,15 +68,14 @@ model User {
 }
 
 model CubeSession {
-  id        String    @id @default(nanoid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id        String   @id @default(nanoid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   name      String
-  userId    String?
   notes     String?
-  user      User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
   solves    Solve[]
-  Setting   Setting[]
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?
 
   @@unique([userId, name])
   @@index([userId])
@@ -95,15 +99,14 @@ model Solve {
 }
 
 model Setting {
-  id            String       @id @default(nanoid())
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  userId        String       @unique
-  focusMode     Boolean      @default(false)
-  cubeType      String       @default("333")
+  id            String   @id @default(nanoid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  userId        String   @unique
+  focusMode     Boolean  @default(false)
+  cubeType      String   @default("333")
   cubeSessionId String?
-  cubeSession   CubeSession? @relation(fields: [cubeSessionId], references: [id], onDelete: Cascade)
-  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }

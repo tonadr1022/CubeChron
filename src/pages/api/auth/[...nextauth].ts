@@ -6,7 +6,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider from "next-auth/providers/github";
 import bcrypt from "bcrypt";
 import prisma from "@/lib/prisma";
-
+import { nanoid } from "nanoid";
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   session: {
@@ -47,36 +47,68 @@ export const authOptions: NextAuthOptions = {
         if (!passwordMatch) {
           throw new Error("Incorrect Password");
         }
-        const cubeSessions = await prisma.cubeSession.findMany({
-          where: {
-            userId: user.id,
-          },
-        });
-        if (cubeSessions.length === 0) {
-          const newUser = await prisma.user.update({
-            where: { id: user.id },
-            data: {
-              setting: {
-                create: {
-                  cubeType: "333",
-                  cubeSession: {
-                    create: { name: "Default", userId: user.id },
-                  },
-                },
-              },
-            },
-            include: {
-              setting: true,
-              cubeSessions: true,
-            },
-          });
-        }
+        // const cubeSession = await prisma.cubeSession.findFirst({
+        //   where: {
+        //     userId: user.id,
+        //   },
+        // });
+        // if (cubeSession) {
+        //   const newUser = await prisma.user.update({
+        //     where: { id: user.id },
+        //     data: {
+        //       setting: {
+        //         create: {
+        //           cubeType: "333",
+        //           cubeSessionId: "1",
+        //         },
+        //       },
+        //     },
+        //     include: {
+        //       setting: true,
+        //       cubeSessions: true,
+        //     },
+        //   });
+        // }
         return user;
       },
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
+    signIn: async ({ user }) => {
+      console.log("On Sign in Callback");
+      const cubeSession = await prisma.cubeSession.findFirst({
+        where: {
+          userId: user.id,
+        },
+      });
+
+      if (cubeSession) return true;
+      console.log("Creating Cube Session and Settings");
+      const randomKey = nanoid();
+      const u = await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          cubeSessions: {
+            create: {
+              id: randomKey,
+              name: "Default",
+            },
+          },
+          setting: {
+            create: {
+              cubeType: "333",
+              cubeSessionId: randomKey,
+            },
+          },
+        },
+        include: {
+          setting: true,
+          cubeSessions: true,
+        },
+      });
+      return true;
+    },
     session: ({ session, token }) => {
       // console.log("Session Callback", { session, token });
       return {
@@ -84,18 +116,16 @@ export const authOptions: NextAuthOptions = {
         user: {
           ...session.user,
           id: token.id,
-          randomKey: token.randomKey,
         },
       };
     },
-    jwt: ({ token, user }) => {
+    jwt: ({ token, user, profile }) => {
       // console.log("JWT Callback", { token, user });
       if (user) {
         const u = user as unknown as any;
         return {
           ...token,
-          id: u.id,
-          randomKey: u.randomKey,
+          id: user.id,
         };
       }
       return token;
