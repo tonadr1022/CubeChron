@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import ScrambleDisplay from "./ScrambleDisplay";
 import Timer from "./Timer";
 import { useAppSelector, useAppDispatch } from "@/hooks/reduxHooks";
-// import { cubeTypeMap } from "@/app/libs/constants";
 import { setCurrentScramble } from "@/redux/slices/scrambleSlice";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@apollo/client";

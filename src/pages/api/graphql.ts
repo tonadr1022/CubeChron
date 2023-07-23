@@ -5,13 +5,14 @@ import { DateTimeResolver } from "graphql-scalars";
 import type PrismaTypes from "@pothos/plugin-prisma/generated";
 import prisma from "@/lib/prisma";
 import { initContextCache } from "@pothos/core";
-import { NextApiRequest } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 import { NextApiRequestCookies } from "next/dist/server/api-utils";
 import PrismaUtils from "@pothos/plugin-prisma-utils";
 import { PrismaCrudGenerator } from "@/graphql/generator";
 import { printSchema } from "graphql";
 import { writeFileSync } from "fs";
 import { resolve } from "path";
+import { decode } from "next-auth/jwt";
 
 export const builder = new SchemaBuilder<{
   PrismaTypes: PrismaTypes;
@@ -21,6 +22,9 @@ export const builder = new SchemaBuilder<{
       Input: Date;
     };
   };
+  Context: {
+    id: string;
+  };
 }>({
   plugins: [PrismaPlugin, PrismaUtils],
 
@@ -28,7 +32,7 @@ export const builder = new SchemaBuilder<{
     client: prisma,
   },
 });
-const generator = new PrismaCrudGenerator(builder);
+
 builder.prismaObject("User", {
   fields: (t) => ({
     id: t.exposeID("id"),
@@ -53,6 +57,7 @@ builder.prismaObject("User", {
     solves: t.relation("solves"),
   }),
 });
+
 builder.prismaObject("Setting", {
   fields: (t) => ({
     id: t.exposeID("id"),
@@ -71,6 +76,7 @@ builder.prismaObject("Setting", {
     user: t.relation("user"),
   }),
 });
+
 builder.prismaObject("CubeSession", {
   fields: (t) => ({
     id: t.exposeID("id"),
@@ -104,7 +110,7 @@ builder.prismaObject("Solve", {
     notes: t.exposeString("notes", { nullable: true }),
     dnf: t.exposeBoolean("dnf", { nullable: true }),
     plusTwo: t.exposeBoolean("plusTwo", { nullable: true }),
-    duration: t.exposeFloat("duration", { nullable: true }),
+    duration: t.exposeFloat("duration"),
     userId: t.exposeString("userId", { nullable: true }),
     cubeSession: t.relation("cubeSession"),
     user: t.relation("user"),
@@ -112,19 +118,106 @@ builder.prismaObject("Solve", {
 });
 
 builder.addScalarType("DateTime", DateTimeResolver, {});
-builder.queryType({});
-// builder.mutationType({});
 
-const CubeSessionInput = builder.inputType("CubeSessionInput", {
+builder.queryType({
+  fields: (t) => ({
+    solves: t.prismaField({
+      type: ["Solve"],
+      resolve: (query, _parent, _args, ctx) =>
+        prisma.solve.findMany({
+          ...query,
+          where: { userId: ctx?.id },
+        }),
+    }),
+    cubeSessions: t.prismaField({
+      type: ["CubeSession"],
+      resolve: (query, _parent, _args, ctx) =>
+        prisma.cubeSession.findMany({
+          ...query,
+          where: { userId: ctx?.id },
+        }),
+    }),
+    setting: t.prismaField({
+      type: "Setting",
+      resolve: async (query, root, args, ctx, info) => {
+        const setting = await prisma.setting.findFirstOrThrow({
+          ...query,
+          where: { userId: ctx?.id },
+        });
+        if (!setting) {
+          throw new Error("Setting not found");
+        }
+        return setting;
+      },
+    }),
+    solve: t.prismaField({
+      type: "Solve",
+      args: { id: t.arg.id() },
+      resolve: async (query, root, args, ctx, info) =>
+        prisma.solve.findUniqueOrThrow({
+          ...query,
+          where: { id: args.id as string },
+        }),
+    }),
+    // solvesByCubeSession: t.prismaField({
+    //   type: ["Solve"],
+    //   args: { id: t.arg.string() },
+    //   resolve: async (query, root, args, ctx, info) => {
+    //     const cubeSession = await prisma.cubeSession.findUniqueOrThrow({
+    //       ...query,
+    //       where: { id: args.id as string },
+    //       include: { solves: true },
+    //     });
+    //     return cubeSession.solves;
+    //   },
+    // }),
+  }),
+});
+
+export const CubeSessionInput = builder.inputType("CubeSessionInput", {
   fields: (t) => ({
     name: t.string({ required: true }),
-    userId: t.string({ required: true }),
     notes: t.string(),
   }),
 });
 
-const SolveInput = builder.inputType("SolveInput", {
+export const CubeSessionUpdateInput = builder.inputType(
+  "CubeSessionUpdateInput",
+  {
+    fields: (t) => ({
+      id: t.string({ required: true }),
+      name: t.string(),
+      notes: t.string(),
+    }),
+  }
+);
+
+export const SettingUpdateInput = builder.inputType("SettingUpdateInput", {
   fields: (t) => ({
+    id: t.string({ required: true }),
+    userId: t.string(),
+    focusMode: t.boolean(),
+    cubeType: t.string(),
+    cubeSessionId: t.string(),
+  }),
+});
+
+export const CreateSolveInput = builder.inputType("CreateSolveInput", {
+  fields: (t) => ({
+    id: t.string({ required: true }),
+    cubeSessionId: t.string({ required: true }),
+    scramble: t.string({ required: true }),
+    cubeType: t.string({ required: true }),
+    notes: t.string(),
+    dnf: t.boolean(),
+    plusTwo: t.boolean(),
+    duration: t.float({ required: true }),
+  }),
+});
+
+export const UpdateSolveInput = builder.inputType("UpdateSolveInput", {
+  fields: (t) => ({
+    id: t.string(),
     cubeSessionId: t.string(),
     scramble: t.string(),
     cubeType: t.string(),
@@ -132,242 +225,114 @@ const SolveInput = builder.inputType("SolveInput", {
     dnf: t.boolean(),
     plusTwo: t.boolean(),
     duration: t.float(),
-    userId: t.string(),
   }),
 });
-
-builder.mutationField("createCubeSession", (t) =>
-  t.prismaField({
-    type: "CubeSession",
-    args: {
-      userId: t.arg.string(),
-      name: t.arg.string(),
-      notes: t.arg.string(),
-    },
-    resolve: async (query, root, args, ctx, info) => {
-      const cubeSession = await prisma.cubeSession.create({
-        data: {
-          name: args.name as string,
-          notes: args.notes,
-          userId: args.userId as string,
-        },
-      });
-      return cubeSession;
-    },
-  })
-);
-builder.mutationField("updateCubeSession", (t) =>
-  t.prismaField({
-    type: "CubeSession",
-    args: {
-      id: t.arg.id(),
-      name: t.arg.string(),
-      notes: t.arg.string(),
-    },
-    resolve: async (query, root, args, ctx, info) => {
-      const cubeSession = await prisma.cubeSession.update({
-        where: {
-          id: args.id as string,
-        },
-        data: {
-          name: args.name as string,
-          notes: args.notes,
-        },
-      });
-      return cubeSession;
-    },
-  })
-);
-
-builder.mutationField("deleteCubeSession", (t) =>
-  t.prismaField({
-    type: "CubeSession",
-    args: {
-      id: t.arg.id(),
-    },
-    resolve: async (query, root, args, ctx, info) => {
-      const cubeSession = await prisma.cubeSession.delete({
-        where: {
-          id: args.id as string,
-        },
-      });
-      return cubeSession;
-    },
-  })
-);
 
 builder.mutationType({
   fields: (t) => ({
     createSolve: t.prismaField({
       type: "Solve",
       args: {
-        input: t.arg({
-          type: generator.getCreateInput("Solve"),
-          required: true,
-        }),
+        input: t.arg({ type: CreateSolveInput, required: true }),
       },
-      resolve: (query, _, args) =>
+      resolve: (query, _, args, ctx) =>
         prisma.solve.create({
           ...query,
           data: {
+            userId: ctx?.id,
             ...args.input,
           },
         }),
     }),
+    updateSolve: t.prismaField({
+      type: "Solve",
+      args: {
+        id: t.arg.string({ required: true }),
+        input: t.arg({ type: UpdateSolveInput }),
+      },
+      resolve: (query, __, args, ctx) => {
+        const id = args.id;
+        const { ...data } = args.input;
+        // Filter out any undefined fields from the input object
+        const updateData = Object.fromEntries(
+          Object.entries(data).filter(([_, value]) => value !== undefined)
+        );
+
+        return prisma.solve.update({
+          ...query,
+          where: { id: id },
+          data: { userId: ctx?.id, ...updateData },
+        });
+      },
+    }),
+
+    deleteSolve: t.prismaField({
+      type: "Solve",
+      args: {
+        id: t.arg.string({ required: true }),
+      },
+      resolve: (query, __, args) =>
+        prisma.solve.delete({ ...query, where: { id: args.id } }),
+    }),
+    createCubeSession: t.prismaField({
+      type: "CubeSession",
+      args: {
+        input: t.arg({ type: CubeSessionInput, required: true }),
+      },
+      resolve: (query, _, args, ctx) =>
+        prisma.cubeSession.create({
+          ...query,
+          data: {
+            userId: ctx?.id,
+            ...args.input,
+          },
+        }),
+    }),
+    updateCubeSession: t.prismaField({
+      type: "CubeSession",
+      args: {
+        input: t.arg({ type: CubeSessionUpdateInput, required: true }),
+      },
+      resolve: (query, __, args, ctx) => {
+        const cubeSessionId = args.input.id;
+        const { id, ...data } = args.input;
+        const updateData = Object.fromEntries(
+          Object.entries(data).filter(([_, value]) => value !== undefined)
+        );
+        return prisma.cubeSession.update({
+          ...query,
+          where: { id: cubeSessionId },
+          data: { userId: ctx?.id, ...updateData },
+        });
+      },
+    }),
+    deleteCubeSession: t.prismaField({
+      type: "CubeSession",
+      args: {
+        id: t.arg.string({ required: true }),
+      },
+      resolve: (query, __, args) =>
+        prisma.cubeSession.delete({ ...query, where: { id: args.id } }),
+    }),
+    updateSetting: t.prismaField({
+      type: "Setting",
+      args: {
+        input: t.arg({ type: SettingUpdateInput, required: true }),
+      },
+      resolve: (query, __, args, ctx) => {
+        const { id, ...data } = args.input;
+        const updateData = Object.fromEntries(
+          Object.entries(data).filter(([_, value]) => value !== undefined)
+        );
+        return prisma.setting.update({
+          ...query,
+          where: { id: id },
+          data: { ...updateData },
+        });
+      },
+    }),
   }),
 });
-// builder.mutationField("createSolve", (t) =>
-//   t.prismaField({
-//     type: "Solve",
-//     args: {
-//       cubeSessionId: t.arg.string(),
-//       scramble: t.arg.string(),
-//       cubeType: t.arg.string(),
-//       notes: t.arg.string(),
-//       dnf: t.arg.boolean(),
-//       plusTwo: t.arg.boolean(),
-//       duration: t.arg.float(),
-//       userId: t.arg.string(),
-//     },
-//     resolve: async (query, root, args, ctx, info) => {
-//       const solve = await prisma.solve.create({
-//         data: {
-//           cubeSessionId: args.cubeSessionId as string,
-//           scramble: args.scramble,
-//           cubeType: args.cubeType as string,
-//           notes: args.notes,
-//           dnf: args.dnf,
-//           plusTwo: args.plusTwo,
-//           duration: args.duration as number,
-//           userId: args.userId as string,
-//         },
-//       });
-//       return solve;
-//     },
-//   })
-// );
-builder.mutationField("updateSolve", (t) =>
-  t.prismaField({
-    type: "Solve",
-    args: {
-      id: t.arg.id(),
-      cubeSessionId: t.arg.string(),
-      scramble: t.arg.string(),
-      cubeType: t.arg.string(),
-      notes: t.arg.string(),
-      dnf: t.arg.boolean(),
-      plusTwo: t.arg.boolean(),
-      duration: t.arg.float(),
-      userId: t.arg.string(),
-    },
-    resolve: async (query, root, args, ctx, info) => {
-      const solve = await prisma.solve.update({
-        where: {
-          id: args.id as string,
-        },
-        data: {
-          cubeSessionId: args.cubeSessionId as string,
-          scramble: args.scramble,
-          cubeType: args.cubeType as string,
-          notes: args.notes,
-          dnf: args.dnf,
-          plusTwo: args.plusTwo,
-          duration: args.duration as number,
-          userId: args.userId,
-        },
-      });
-      return solve;
-    },
-  })
-);
-// delete solve
-builder.mutationField("deleteSolve", (t) =>
-  t.prismaField({
-    type: "Solve",
-    args: {
-      id: t.arg.id(),
-    },
-    resolve: async (query, root, args, ctx, info) => {
-      const solve = await prisma.solve.delete({
-        where: {
-          id: args.id as string,
-        },
-      });
-      return solve;
-    },
-  })
-);
-
-builder.mutationField("updateUser", (t) =>
-  t.prismaField({
-    type: "User",
-    args: {
-      id: t.arg.id(),
-      name: t.arg.string(),
-      email: t.arg.string(),
-      password: t.arg.string(),
-    },
-    resolve: async (query, root, args, ctx, info) => {
-      const user = await prisma.user.update({
-        where: {
-          id: args.id as string,
-        },
-        data: {
-          name: args.name,
-          email: args.email,
-          password: args.password,
-        },
-      });
-      return user;
-    },
-  })
-);
-
-builder.mutationField("deleteUser", (t) =>
-  t.prismaField({
-    type: "User",
-    args: {
-      id: t.arg.id(),
-    },
-    resolve: async (query, root, args, ctx, info) => {
-      const user = await prisma.user.delete({
-        where: {
-          id: args.id as string,
-        },
-      });
-      return user;
-    },
-  })
-);
-builder.mutationType;
-
-builder.mutationField("updateSetting", (t) =>
-  t.prismaField({
-    type: "Setting",
-    args: {
-      id: t.arg.id(),
-      userId: t.arg.string(),
-      focusMode: t.arg.boolean(),
-      cubeType: t.arg.string(),
-      cubeSessionId: t.arg.string(),
-    },
-    resolve: async (query, root, args, ctx, info) => {
-      const setting = await prisma.setting.update({
-        where: {
-          id: args.id as string,
-        },
-        data: {
-          userId: args.userId as string,
-          id: args.id as string,
-          focusMode: args.focusMode as boolean,
-          cubeType: args.cubeType as string,
-          cubeSessionId: args.cubeSessionId as string,
-        },
-      });
-      return setting;
-    },
-  })
-);
 
 // builder.queryField("cubeSession", (t) =>
 //   t.prismaField({
@@ -389,154 +354,18 @@ builder.mutationField("updateSetting", (t) =>
 //   })
 // );
 
-// model User {
-//   id            String        @id @default(cuid())
-//   name          String?
-//   password      String?
-//   email         String?       @unique
-//   emailVerified DateTime?
-//   image         String?
-//   createdAt     DateTime      @default(now())
-//   updatedAt     DateTime      @updatedAt
-//   accounts      Account[]
-//   sessions      Session[]
-//   cubeSessions  CubeSession[]
-//   setting       Setting?
-//   solves        Solve[]
-// }
-
-// user cube sessions
-
-builder.queryField("userCubeSessions", (t) =>
-  t.prismaField({
-    type: ["CubeSession"],
-    args: {
-      userId: t.arg.string(),
-    },
-    resolve: async (query, root, args, ctx, info) => {
-      const cubeSessions = await prisma.cubeSession.findMany({
-        where: {
-          userId: args.userId as string,
-        },
-      });
-      return cubeSessions;
-    },
-  })
-);
-builder.queryField("solves", (t) =>
-  t.prismaField({
-    type: ["Solve"],
-    args: {
-      userId: t.arg.string(),
-    },
-    resolve: async (query, root, args, ctx, info) => {
-      const solves = await prisma.solve.findMany({
-        where: {
-          userId: args.userId as string,
-        },
-      });
-      return solves;
-    },
-  })
-);
-
-// // user solves
-// builder.queryField("userSolves", (t) =>
-//   t.prismaField({
-//     type: ["Solve"], // 1. Update the type to an array of 'Solve'
-//     args: {
-//       id: t.arg.string(),
-//     },
-//     resolve: async (query, root, args, ctx, info) => {
-//       const user = await prisma.user.findUniqueOrThrow({
-//         where: {
-//           id: args.id as string,
-//         },
-//         include: {
-//           solves: true, // Automatically include related 'solves'
-//         },
-//       });
-
-//       return user.solves; // 2. Return the related 'solves'
-//     },
-//   })
-// );
-
-// user setting
-builder.queryField("setting", (t) =>
-  t.prismaField({
-    type: "Setting",
-    args: {
-      userId: t.arg.string(),
-    },
-    resolve: async (query, root, args, ctx, info) => {
-      const setting = await prisma.setting.findUniqueOrThrow({
-        where: {
-          userId: args.userId as string,
-        },
-      });
-      return setting;
-    },
-  })
-);
-
-// solve by id
-builder.queryField("solve", (t) =>
-  t.prismaField({
-    type: "Solve",
-    args: {
-      id: t.arg.id(),
-    },
-    resolve: async (query, root, args, ctx, info) => {
-      const solve = await prisma.solve.findUniqueOrThrow({
-        where: {
-          id: args.id as string,
-        },
-      });
-      return solve;
-    },
-  })
-);
-
-// cube session solves
-builder.queryField("cubeSessionSolves", (t) =>
-  t.prismaField({
-    type: ["Solve"],
-    args: {
-      id: t.arg.string(),
-    },
-    resolve: async (query, root, args, ctx, info) => {
-      const cubeSession = await prisma.cubeSession.findUniqueOrThrow({
-        where: {
-          id: args.id as string,
-        },
-        include: {
-          solves: true,
-        },
-      });
-      return cubeSession.solves;
-    },
-  })
-);
-
-// const server = createYoga({
-//   schema: builder.toSchema(),
-//   context: (req) => {
-//     req.request.headers.get("x-user-id");
-//     return {
-//       ...req,
-//       prisma,
-//     };
-//   },
-// });
 const schema = builder.toSchema();
-
 writeFileSync(resolve(__dirname, "../schema.graphql"), printSchema(schema));
 
-export default createYoga<{
-  req: NextApiRequest;
-  res: NextApiRequestCookies;
-}>({
+export default createYoga<{ req: NextApiRequest; res: NextApiRequestCookies }>({
+  context: async (ctx) => {
+    const sessionToken = ctx.req.cookies["next-auth.session-token"];
+    const decoded = await decode({
+      token: sessionToken,
+      secret: process.env.NEXTAUTH_SECRET!,
+    });
+    return { id: decoded?.id };
+  },
   schema,
   graphqlEndpoint: "/api/graphql",
 });

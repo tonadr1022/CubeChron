@@ -13,49 +13,18 @@ import { useEffect } from "react";
 import { GetServerSidePropsContext } from "next";
 import { useQuery } from "@apollo/client";
 import { graphql } from "@/__generated__";
-import { SolvesDocument } from "@/__generated__/graphql";
+import {
+  SettingQueryDocument,
+  SolvesQueryDocument,
+} from "@/__generated__/graphql";
 import { useAppDispatch } from "@/hooks/reduxHooks";
 import { setUser } from "@/redux/slices/userSlice";
 import RightSideBar from "@/components/RightSideBar";
 import { Scrambow } from "scrambow";
-
+import TimerScrambleContainer from "@/components/TimerScrambleContainer";
 // import { UserQuery } from "@/__generated__/graphql";
 
 const inter = Inter({ subsets: ["latin"] });
-
-// const HomePageUserQueryDocument = graphql(/* GraphQL */ `
-//   query user($id: String!) {
-//     user(id: $id) {
-//       createdAt
-//       solves {
-//         cubeType
-//         dnf
-//         duration
-//         id
-//         notes
-//         plusTwo
-//       }
-//       cubeSessions {
-//         id
-//         name
-//         solves {
-//           cubeType
-//           dnf
-//           duration
-//           id
-//           notes
-//           plusTwo
-//         }
-//       }
-//       setting {
-//         cubeType
-//         focusMode
-//         id
-//         cubeSessionId
-//       }
-//     }
-//   }
-// `);
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -78,9 +47,8 @@ const Home = () => {
           {/* <CubeSessionSelect /> */}
         </div>
         <div className="flex flex-col text-center ">
-          {/* <TimerScrambleContainer /> */}
+          <TimerScrambleContainer />
         </div>
-
         {/* <MainTimerOptions /> */}
       </div>
       <RightSideBar />
@@ -105,10 +73,14 @@ export const getServerSideProps = async (
   }
   // need to get user id from session but can't
   const { data, loading, error } = await client.query({
-    query: SolvesDocument,
-    variables: {
-      userId: session?.user?.id,
-    },
+    query: SolvesQueryDocument,
+  });
+  const {
+    data: o,
+    loading: k,
+    error: j,
+  } = await client.query({
+    query: SettingQueryDocument,
   });
 
   return {

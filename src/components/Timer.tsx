@@ -16,60 +16,21 @@ import { nanoid } from "@reduxjs/toolkit";
 import { redirect } from "next/navigation";
 import { selectUser } from "@/redux/slices/userSlice";
 import {
-  // SettingDocument,
-  MutationCreateSolveArgs,
+  CreateSolveDocument,
+  CreateSolveInput,
+  SettingQueryDocument,
+  SolvesQueryDocument,
 } from "@/__generated__/graphql";
-gql`
-  query Setting($userId: String!) {
-    setting(userId: $userId) {
-      cubeType
-      cubeSessionId
-      focusMode
-      id
-    }
-  }
-`;
-// gql`
-//   input CreateSolveInput {
-//     cubeSessionId: String
-//     scramble: String
-//     cubeType: String!
-//     notes: String
-//     dnf: Boolean
-//     plusTwo: Boolean
-//     duration: Float!
-//     userId: String
-//   }
-// `;
-// gql`
-//   mutation CreateSolve($input: ${}) {
-//     createSolve(
-//       id
-//       userId
-//       scramble
-//       plusTwo
-//       notes
-//       duration
-//       dnf
-//       cubeType
-//       cubeSessionId
-//     )
-//   }
-// `;
+
 const Timer = () => {
   const userId = useAppSelector(selectUser);
 
   const { timerState, timerTimeoutId, timerIntervalId } = useAppSelector(
     (state) => state.timer
   );
-  // const { data, loading, error } = useQuery(SettingDocument, {
-  //   variables: { userId },
-  // });
-  // const cubeSessionId = data?.setting?.cubeSessionId;
-  // const cubeType = data?.setting?.cubeType;
-
-  // const { cubeSessionId, cubeType } = useAppSelector((state) => state.setting);
-  // if (!cubeSessionId || !cubeType) redirect("/login");
+  const { data, loading, error } = useQuery(SettingQueryDocument);
+  const cubeSessionId = data?.setting?.cubeSessionId!;
+  const cubeType = data?.setting?.cubeType!;
 
   const { currentScramble, scrambleType } = useAppSelector(
     (state) => state.scramble
@@ -77,8 +38,9 @@ const Timer = () => {
   const dispatch = useAppDispatch();
 
   const [duration, setDuration] = useState<number>(0);
-  // const [createSolve] = useMutation(CreateSolveDocument);
-
+  const [createSolve] = useMutation(CreateSolveDocument, {
+    refetchQueries: [{ query: SolvesQueryDocument }],
+  });
   const updateTimer = (start: number) => {
     const id = setInterval(() => {
       setDuration(Date.now() - start);
@@ -91,17 +53,29 @@ const Timer = () => {
       // solve was active and now finished
       if (timerTimeoutId) clearTimeout(timerTimeoutId);
       if (timerIntervalId) clearInterval(timerIntervalId);
-      const input: MutationCreateSolveArgs = {
-        // cubeType,
-        // cubeSessionId,
+      const input: CreateSolveInput = {
+        id: nanoid(),
+        cubeType,
+        cubeSessionId,
         duration,
         dnf: false,
         plusTwo: false,
         scramble: currentScramble,
-        userId: userId,
       };
-      // create solve
-
+      createSolve({
+        variables: { input },
+        optimisticResponse(vars) {
+          return {
+            __typename: "Mutation",
+            createSolve: {
+              __typename: "Solve",
+              ...input,
+              notes: null,
+              createdAt: new Date().toISOString(),
+            },
+          };
+        },
+      });
       dispatch(setTimerState("stalling"));
       dispatch(
         setCurrentScramble(

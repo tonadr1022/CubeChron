@@ -68,13 +68,13 @@ model User {
 }
 
 model CubeSession {
-  id        String   @id @default(nanoid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String    @id @default(nanoid())
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
   name      String
   notes     String?
   solves    Solve[]
-  User      User?    @relation(fields: [userId], references: [id])
+  user      User?     @relation(fields: [userId], references: [id])
   userId    String?
 
   @@unique([userId, name])
@@ -83,10 +83,10 @@ model CubeSession {
 
 model Solve {
   id            String       @id @default(nanoid())
-  createdAt     DateTime     @default(now())
+  createdAt     DateTime?    @default(now())
   cubeSessionId String?
   scramble      String?
-  cubeType      String
+  cubeType      String?
   notes         String?
   dnf           Boolean?     @default(false)
   plusTwo       Boolean?     @default(false)
@@ -99,14 +99,14 @@ model Solve {
 }
 
 model Setting {
-  id            String   @id @default(nanoid())
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  userId        String   @unique
-  focusMode     Boolean  @default(false)
-  cubeType      String   @default("333")
+  id            String    @id @default(nanoid())
+  createdAt     DateTime? @default(now())
+  updatedAt     DateTime? @updatedAt
+  userId        String?   @unique
+  focusMode     Boolean   @default(false)
+  cubeType      String    @default("333")
   cubeSessionId String?
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user          User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }

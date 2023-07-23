@@ -1,4 +1,3 @@
-"use client";
 import { useAppSelector } from "@/hooks/reduxHooks";
 
 const ScrambleDisplay = ({ scramble }: { scramble: string }) => {

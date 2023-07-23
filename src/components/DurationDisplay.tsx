@@ -1,4 +1,3 @@
-"use client";
 import { formatTime } from "@/utils/formatTime";
 import { useAppSelector } from "@/hooks/reduxHooks";
 import { twMerge } from "tailwind-merge";

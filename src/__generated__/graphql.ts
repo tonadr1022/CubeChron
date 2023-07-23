@@ -18,22 +18,15 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
-export type AccountCreateWithoutUserInput = {
-  accessToken?: InputMaybe<Scalars['String']['input']>;
-  accessTokenExpires?: InputMaybe<Scalars['DateTime']['input']>;
-  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
-  id?: InputMaybe<Scalars['String']['input']>;
-  providerAccountId: Scalars['String']['input'];
-  providerId: Scalars['String']['input'];
-  providerType: Scalars['String']['input'];
-  refreshToken?: InputMaybe<Scalars['String']['input']>;
-  updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
-};
-
-export type AccountUniqueFilter = {
-  id?: InputMaybe<Scalars['String']['input']>;
-  providerAccountId?: InputMaybe<Scalars['String']['input']>;
-  providerId?: InputMaybe<Scalars['String']['input']>;
+export type CreateSolveInput = {
+  cubeSessionId: Scalars['String']['input'];
+  cubeType: Scalars['String']['input'];
+  dnf?: InputMaybe<Scalars['Boolean']['input']>;
+  duration: Scalars['Float']['input'];
+  id: Scalars['String']['input'];
+  notes?: InputMaybe<Scalars['String']['input']>;
+  plusTwo?: InputMaybe<Scalars['Boolean']['input']>;
+  scramble: Scalars['String']['input'];
 };
 
 export type CubeSession = {
@@ -48,44 +41,15 @@ export type CubeSession = {
   userId?: Maybe<Scalars['String']['output']>;
 };
 
-export type CubeSessionCreateSolvesRelationInput = {
-  connect?: InputMaybe<Array<SolveUniqueFilter>>;
-  create?: InputMaybe<Array<SolveCreateWithoutCubeSessionInput>>;
-};
-
-export type CubeSessionCreateUserRelationInput = {
-  connect?: InputMaybe<UserUniqueFilter>;
-  create?: InputMaybe<UserCreateWithoutCubeSessionsInput>;
-};
-
-export type CubeSessionCreateWithoutSolvesInput = {
-  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
-  id?: InputMaybe<Scalars['String']['input']>;
-  name: Scalars['String']['input'];
-  notes?: InputMaybe<Scalars['String']['input']>;
-  updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
-  user?: InputMaybe<CubeSessionCreateUserRelationInput>;
-};
-
-export type CubeSessionCreateWithoutUserInput = {
-  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
-  id?: InputMaybe<Scalars['String']['input']>;
-  name: Scalars['String']['input'];
-  notes?: InputMaybe<Scalars['String']['input']>;
-  solves?: InputMaybe<CubeSessionCreateSolvesRelationInput>;
-  updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
-};
-
 export type CubeSessionInput = {
   name: Scalars['String']['input'];
   notes?: InputMaybe<Scalars['String']['input']>;
-  userId: Scalars['String']['input'];
 };
 
-export type CubeSessionUniqueFilter = {
-  id?: InputMaybe<Scalars['String']['input']>;
+export type CubeSessionUpdateInput = {
+  id: Scalars['String']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
-  userId?: InputMaybe<Scalars['String']['input']>;
+  notes?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Mutation = {
@@ -94,124 +58,58 @@ export type Mutation = {
   createSolve: Solve;
   deleteCubeSession: CubeSession;
   deleteSolve: Solve;
-  deleteUser: User;
   updateCubeSession: CubeSession;
   updateSetting: Setting;
   updateSolve: Solve;
-  updateUser: User;
 };
 
 
 export type MutationCreateCubeSessionArgs = {
-  name?: InputMaybe<Scalars['String']['input']>;
-  notes?: InputMaybe<Scalars['String']['input']>;
-  userId?: InputMaybe<Scalars['String']['input']>;
+  input: CubeSessionInput;
 };
 
 
 export type MutationCreateSolveArgs = {
-  input: SolveCreateInput;
+  input: CreateSolveInput;
 };
 
 
 export type MutationDeleteCubeSessionArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['String']['input'];
 };
 
 
 export type MutationDeleteSolveArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
-};
-
-
-export type MutationDeleteUserArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['String']['input'];
 };
 
 
 export type MutationUpdateCubeSessionArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  notes?: InputMaybe<Scalars['String']['input']>;
+  input: CubeSessionUpdateInput;
 };
 
 
 export type MutationUpdateSettingArgs = {
-  cubeSessionId?: InputMaybe<Scalars['String']['input']>;
-  cubeType?: InputMaybe<Scalars['String']['input']>;
-  focusMode?: InputMaybe<Scalars['Boolean']['input']>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  userId?: InputMaybe<Scalars['String']['input']>;
+  input: SettingUpdateInput;
 };
 
 
 export type MutationUpdateSolveArgs = {
-  cubeSessionId?: InputMaybe<Scalars['String']['input']>;
-  cubeType?: InputMaybe<Scalars['String']['input']>;
-  dnf?: InputMaybe<Scalars['Boolean']['input']>;
-  duration?: InputMaybe<Scalars['Float']['input']>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  notes?: InputMaybe<Scalars['String']['input']>;
-  plusTwo?: InputMaybe<Scalars['Boolean']['input']>;
-  scramble?: InputMaybe<Scalars['String']['input']>;
-  userId?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type MutationUpdateUserArgs = {
-  email?: InputMaybe<Scalars['String']['input']>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  password?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  input?: InputMaybe<UpdateSolveInput>;
 };
 
 export type Query = {
   __typename?: 'Query';
-  cubeSessionSolves: Array<Solve>;
+  cubeSessions: Array<CubeSession>;
   setting: Setting;
   solve: Solve;
   solves: Array<Solve>;
-  userCubeSessions: Array<CubeSession>;
-};
-
-
-export type QueryCubeSessionSolvesArgs = {
-  id?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QuerySettingArgs = {
-  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type QuerySolveArgs = {
   id?: InputMaybe<Scalars['ID']['input']>;
-};
-
-
-export type QuerySolvesArgs = {
-  userId?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QueryUserCubeSessionsArgs = {
-  userId?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type SessionCreateWithoutUserInput = {
-  accessToken: Scalars['String']['input'];
-  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
-  expires: Scalars['DateTime']['input'];
-  id?: InputMaybe<Scalars['String']['input']>;
-  sessionToken: Scalars['String']['input'];
-  updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
-};
-
-export type SessionUniqueFilter = {
-  accessToken?: InputMaybe<Scalars['String']['input']>;
-  id?: InputMaybe<Scalars['String']['input']>;
-  sessionToken?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Setting = {
@@ -226,17 +124,11 @@ export type Setting = {
   userId?: Maybe<Scalars['String']['output']>;
 };
 
-export type SettingCreateWithoutUserInput = {
-  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+export type SettingUpdateInput = {
   cubeSessionId?: InputMaybe<Scalars['String']['input']>;
   cubeType?: InputMaybe<Scalars['String']['input']>;
   focusMode?: InputMaybe<Scalars['Boolean']['input']>;
-  id?: InputMaybe<Scalars['String']['input']>;
-  updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
-};
-
-export type SettingUniqueFilter = {
-  id?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
   userId?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -247,7 +139,7 @@ export type Solve = {
   cubeSessionId?: Maybe<Scalars['String']['output']>;
   cubeType?: Maybe<Scalars['String']['output']>;
   dnf?: Maybe<Scalars['Boolean']['output']>;
-  duration?: Maybe<Scalars['Float']['output']>;
+  duration: Scalars['Float']['output'];
   id: Scalars['ID']['output'];
   notes?: Maybe<Scalars['String']['output']>;
   plusTwo?: Maybe<Scalars['Boolean']['output']>;
@@ -256,66 +148,15 @@ export type Solve = {
   userId?: Maybe<Scalars['String']['output']>;
 };
 
-export type SolveCreateCubeSessionRelationInput = {
-  connect?: InputMaybe<CubeSessionUniqueFilter>;
-  create?: InputMaybe<CubeSessionCreateWithoutSolvesInput>;
-};
-
-export type SolveCreateInput = {
-  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
-  cubeSession?: InputMaybe<SolveCreateCubeSessionRelationInput>;
-  cubeType: Scalars['String']['input'];
-  dnf?: InputMaybe<Scalars['Boolean']['input']>;
-  duration: Scalars['Float']['input'];
-  id?: InputMaybe<Scalars['String']['input']>;
-  notes?: InputMaybe<Scalars['String']['input']>;
-  plusTwo?: InputMaybe<Scalars['Boolean']['input']>;
-  scramble?: InputMaybe<Scalars['String']['input']>;
-  user?: InputMaybe<SolveCreateUserRelationInput>;
-};
-
-export type SolveCreateUserRelationInput = {
-  connect?: InputMaybe<UserUniqueFilter>;
-  create?: InputMaybe<UserCreateWithoutSolvesInput>;
-};
-
-export type SolveCreateWithoutCubeSessionInput = {
-  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
-  cubeType: Scalars['String']['input'];
-  dnf?: InputMaybe<Scalars['Boolean']['input']>;
-  duration: Scalars['Float']['input'];
-  id?: InputMaybe<Scalars['String']['input']>;
-  notes?: InputMaybe<Scalars['String']['input']>;
-  plusTwo?: InputMaybe<Scalars['Boolean']['input']>;
-  scramble?: InputMaybe<Scalars['String']['input']>;
-  user?: InputMaybe<SolveCreateUserRelationInput>;
-};
-
-export type SolveCreateWithoutUserInput = {
-  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
-  cubeSession?: InputMaybe<SolveCreateCubeSessionRelationInput>;
-  cubeType: Scalars['String']['input'];
-  dnf?: InputMaybe<Scalars['Boolean']['input']>;
-  duration: Scalars['Float']['input'];
-  id?: InputMaybe<Scalars['String']['input']>;
-  notes?: InputMaybe<Scalars['String']['input']>;
-  plusTwo?: InputMaybe<Scalars['Boolean']['input']>;
-  scramble?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type SolveInput = {
+export type UpdateSolveInput = {
   cubeSessionId?: InputMaybe<Scalars['String']['input']>;
   cubeType?: InputMaybe<Scalars['String']['input']>;
   dnf?: InputMaybe<Scalars['Boolean']['input']>;
   duration?: InputMaybe<Scalars['Float']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
   notes?: InputMaybe<Scalars['String']['input']>;
   plusTwo?: InputMaybe<Scalars['Boolean']['input']>;
   scramble?: InputMaybe<Scalars['String']['input']>;
-  userId?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type SolveUniqueFilter = {
-  id?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = {
@@ -332,80 +173,43 @@ export type User = {
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
-export type UserCreateAccountsRelationInput = {
-  connect?: InputMaybe<Array<AccountUniqueFilter>>;
-  create?: InputMaybe<Array<AccountCreateWithoutUserInput>>;
-};
+export type SolveTable_SolveFragment = { __typename?: 'Solve', id: string, duration: number, dnf?: boolean | null, plusTwo?: boolean | null } & { ' $fragmentName'?: 'SolveTable_SolveFragment' };
 
-export type UserCreateCubeSessionsRelationInput = {
-  connect?: InputMaybe<Array<CubeSessionUniqueFilter>>;
-  create?: InputMaybe<Array<CubeSessionCreateWithoutUserInput>>;
-};
-
-export type UserCreateSessionsRelationInput = {
-  connect?: InputMaybe<Array<SessionUniqueFilter>>;
-  create?: InputMaybe<Array<SessionCreateWithoutUserInput>>;
-};
-
-export type UserCreateSettingRelationInput = {
-  connect?: InputMaybe<SettingUniqueFilter>;
-  create?: InputMaybe<SettingCreateWithoutUserInput>;
-};
-
-export type UserCreateSolvesRelationInput = {
-  connect?: InputMaybe<Array<SolveUniqueFilter>>;
-  create?: InputMaybe<Array<SolveCreateWithoutUserInput>>;
-};
-
-export type UserCreateWithoutCubeSessionsInput = {
-  accounts?: InputMaybe<UserCreateAccountsRelationInput>;
-  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
-  email?: InputMaybe<Scalars['String']['input']>;
-  emailVerified?: InputMaybe<Scalars['DateTime']['input']>;
-  id?: InputMaybe<Scalars['String']['input']>;
-  image?: InputMaybe<Scalars['String']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  password?: InputMaybe<Scalars['String']['input']>;
-  sessions?: InputMaybe<UserCreateSessionsRelationInput>;
-  setting?: InputMaybe<UserCreateSettingRelationInput>;
-  solves?: InputMaybe<UserCreateSolvesRelationInput>;
-  updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
-};
-
-export type UserCreateWithoutSolvesInput = {
-  accounts?: InputMaybe<UserCreateAccountsRelationInput>;
-  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
-  cubeSessions?: InputMaybe<UserCreateCubeSessionsRelationInput>;
-  email?: InputMaybe<Scalars['String']['input']>;
-  emailVerified?: InputMaybe<Scalars['DateTime']['input']>;
-  id?: InputMaybe<Scalars['String']['input']>;
-  image?: InputMaybe<Scalars['String']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  password?: InputMaybe<Scalars['String']['input']>;
-  sessions?: InputMaybe<UserCreateSessionsRelationInput>;
-  setting?: InputMaybe<UserCreateSettingRelationInput>;
-  updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
-};
-
-export type UserUniqueFilter = {
-  email?: InputMaybe<Scalars['String']['input']>;
-  id?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type SolvesQueryVariables = Exact<{
-  userId: Scalars['String']['input'];
+export type CreateSolveMutationVariables = Exact<{
+  input: CreateSolveInput;
 }>;
 
 
-export type SolvesQuery = { __typename?: 'Query', solves: Array<{ __typename?: 'Solve', createdAt?: any | null, cubeSessionId?: string | null, cubeType?: string | null, dnf?: boolean | null, duration?: number | null, id: string, notes?: string | null, plusTwo?: boolean | null, scramble?: string | null }> };
+export type CreateSolveMutation = { __typename?: 'Mutation', createSolve: { __typename?: 'Solve', createdAt?: any | null, cubeSessionId?: string | null, cubeType?: string | null, dnf?: boolean | null, duration: number, id: string, notes?: string | null, plusTwo?: boolean | null, scramble?: string | null } };
 
-export type SettingQueryVariables = Exact<{
-  userId: Scalars['String']['input'];
+export type DeleteSolveMutationVariables = Exact<{
+  id: Scalars['String']['input'];
 }>;
 
 
-export type SettingQuery = { __typename?: 'Query', setting: { __typename?: 'Setting', cubeType?: string | null, cubeSessionId?: string | null, focusMode?: boolean | null, id: string } };
+export type DeleteSolveMutation = { __typename?: 'Mutation', deleteSolve: { __typename?: 'Solve', id: string, createdAt?: any | null, cubeSessionId?: string | null, scramble?: string | null, cubeType?: string | null, notes?: string | null, dnf?: boolean | null, plusTwo?: boolean | null, duration: number } };
+
+export type UpdateSolveMutationVariables = Exact<{
+  id: Scalars['String']['input'];
+  input: UpdateSolveInput;
+}>;
 
 
-export const SolvesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Solves"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"solves"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"userId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"cubeSessionId"}},{"kind":"Field","name":{"kind":"Name","value":"cubeType"}},{"kind":"Field","name":{"kind":"Name","value":"dnf"}},{"kind":"Field","name":{"kind":"Name","value":"duration"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"notes"}},{"kind":"Field","name":{"kind":"Name","value":"plusTwo"}},{"kind":"Field","name":{"kind":"Name","value":"scramble"}}]}}]}}]} as unknown as DocumentNode<SolvesQuery, SolvesQueryVariables>;
-export const SettingDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Setting"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"setting"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"userId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cubeType"}},{"kind":"Field","name":{"kind":"Name","value":"cubeSessionId"}},{"kind":"Field","name":{"kind":"Name","value":"focusMode"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<SettingQuery, SettingQueryVariables>;
+export type UpdateSolveMutation = { __typename?: 'Mutation', updateSolve: { __typename?: 'Solve', createdAt?: any | null, cubeSessionId?: string | null, cubeType?: string | null, dnf?: boolean | null, duration: number, id: string, notes?: string | null, plusTwo?: boolean | null, scramble?: string | null } };
+
+export type SolvesQueryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SolvesQueryQuery = { __typename?: 'Query', solves: Array<{ __typename?: 'Solve', createdAt?: any | null, cubeSessionId?: string | null, cubeType?: string | null, dnf?: boolean | null, duration: number, id: string, notes?: string | null, plusTwo?: boolean | null, scramble?: string | null }> };
+
+export type SettingQueryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SettingQueryQuery = { __typename?: 'Query', setting: { __typename?: 'Setting', cubeType?: string | null, cubeSessionId?: string | null, focusMode?: boolean | null, id: string } };
+
+export const SolveTable_SolveFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"SolveTable_Solve"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Solve"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"duration"}},{"kind":"Field","name":{"kind":"Name","value":"dnf"}},{"kind":"Field","name":{"kind":"Name","value":"plusTwo"}}]}}]} as unknown as DocumentNode<SolveTable_SolveFragment, unknown>;
+export const CreateSolveDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"createSolve"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateSolveInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createSolve"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"cubeSessionId"}},{"kind":"Field","name":{"kind":"Name","value":"cubeType"}},{"kind":"Field","name":{"kind":"Name","value":"dnf"}},{"kind":"Field","name":{"kind":"Name","value":"duration"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"notes"}},{"kind":"Field","name":{"kind":"Name","value":"plusTwo"}},{"kind":"Field","name":{"kind":"Name","value":"scramble"}}]}}]}}]} as unknown as DocumentNode<CreateSolveMutation, CreateSolveMutationVariables>;
+export const DeleteSolveDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"deleteSolve"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteSolve"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"cubeSessionId"}},{"kind":"Field","name":{"kind":"Name","value":"scramble"}},{"kind":"Field","name":{"kind":"Name","value":"cubeType"}},{"kind":"Field","name":{"kind":"Name","value":"notes"}},{"kind":"Field","name":{"kind":"Name","value":"dnf"}},{"kind":"Field","name":{"kind":"Name","value":"plusTwo"}},{"kind":"Field","name":{"kind":"Name","value":"duration"}}]}}]}}]} as unknown as DocumentNode<DeleteSolveMutation, DeleteSolveMutationVariables>;
+export const UpdateSolveDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"updateSolve"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateSolveInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateSolve"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"cubeSessionId"}},{"kind":"Field","name":{"kind":"Name","value":"cubeType"}},{"kind":"Field","name":{"kind":"Name","value":"dnf"}},{"kind":"Field","name":{"kind":"Name","value":"duration"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"notes"}},{"kind":"Field","name":{"kind":"Name","value":"plusTwo"}},{"kind":"Field","name":{"kind":"Name","value":"scramble"}}]}}]}}]} as unknown as DocumentNode<UpdateSolveMutation, UpdateSolveMutationVariables>;
+export const SolvesQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SolvesQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"solves"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"cubeSessionId"}},{"kind":"Field","name":{"kind":"Name","value":"cubeType"}},{"kind":"Field","name":{"kind":"Name","value":"dnf"}},{"kind":"Field","name":{"kind":"Name","value":"duration"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"notes"}},{"kind":"Field","name":{"kind":"Name","value":"plusTwo"}},{"kind":"Field","name":{"kind":"Name","value":"scramble"}}]}}]}}]} as unknown as DocumentNode<SolvesQueryQuery, SolvesQueryQueryVariables>;
+export const SettingQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SettingQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"setting"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cubeType"}},{"kind":"Field","name":{"kind":"Name","value":"cubeSessionId"}},{"kind":"Field","name":{"kind":"Name","value":"focusMode"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<SettingQueryQuery, SettingQueryQueryVariables>;
