@@ -1,8 +1,4 @@
-import {
-  combineReducers,
-  configureStore,
-  getDefaultMiddleware,
-} from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import scrambleSlice from "./slices/scrambleSlice";
 import timerSlice from "./slices/timerSlice";
 import userSlice from "./slices/userSlice";

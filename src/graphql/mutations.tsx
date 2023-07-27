@@ -1,33 +1,24 @@
 import { graphql } from "@/__generated__";
 import { gql } from "@apollo/client";
 
-// gql`
-//   mutation CreateSolve($input: CreateSolveInput!) {
-//     createSolve(input: $input) (
-//       id
-//       userId
-//       scramble
-//       plusTwo
-//       notes
-//       duration
-//       dnf
-//       cubeType
-//       cubeSessionId
-//     )
-//   }
-// `;
+export const SOLVE_FRAGMENT = gql`
+  fragment Solve on Solve {
+    id
+    duration
+    createdAt
+    dnf
+    plusTwo
+    scramble
+    cubeType
+    cubeSessionId
+    notes
+  }
+`;
+
 gql`
   mutation createSolve($input: CreateSolveInput!) {
     createSolve(input: $input) {
-      createdAt
-      cubeSessionId
-      cubeType
-      dnf
-      duration
-      id
-      notes
-      plusTwo
-      scramble
+      ...Solve
     }
   }
 `;
@@ -41,15 +32,7 @@ gql`
 gql`
   mutation updateSolve($id: String!, $input: UpdateSolveInput!) {
     updateSolve(id: $id, input: $input) {
-      createdAt
-      cubeSessionId
-      cubeType
-      dnf
-      duration
-      id
-      notes
-      plusTwo
-      scramble
+      ...Solve
     }
   }
 `;
@@ -60,8 +43,20 @@ gql`
       id
       focusMode
       cubeType
+      barView
       cubeDisplayDimension
       cubeSessionId
+    }
+  }
+`;
+
+gql`
+  mutation createCubeSession($input: CubeSessionInput!) {
+    createCubeSession(input: $input) {
+      id
+      name
+      cubeType
+      notes
     }
   }
 `;

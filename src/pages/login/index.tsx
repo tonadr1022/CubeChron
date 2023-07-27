@@ -13,11 +13,11 @@ export default function Login() {
     password: "",
   });
 
-  useEffect(() => {
-    if (session?.status === "authenticated") {
-      router.push("/");
-    }
-  });
+  // useEffect(() => {
+  //   if (session?.status === "authenticated") {
+  //     router.push("/");
+  //   }
+  // });
   const loginUser = async (e: FormEvent<HTMLElement>) => {
     e.preventDefault();
     signIn("credentials", { ...data, redirect: false }).then((callback) => {

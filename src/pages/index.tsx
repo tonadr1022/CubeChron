@@ -14,50 +14,71 @@ import { GetServerSidePropsContext } from "next";
 import { useQuery } from "@apollo/client";
 import { graphql } from "@/__generated__";
 import {
+  CubeSessionsDocument,
   SettingQueryDocument,
+  SettingQueryQuery,
   SolvesQueryDocument,
 } from "@/__generated__/graphql";
 import { useAppDispatch } from "@/hooks/reduxHooks";
 import { setUser } from "@/redux/slices/userSlice";
-import RightSideBar from "@/components/RightSideBar";
+import RightSideBar from "@/components/layout/RightSideBar";
 import { Scrambow } from "scrambow";
-import TimerScrambleContainer from "@/components/TimerScrambleContainer";
+import TimerScrambleContainer from "@/components/timer/TimerScrambleContainer";
 import dynamic from "next/dynamic";
+import OptionsBar from "@/components/optionsBar/OptionsBar";
+import CubeDisplay from "@/components/cubeDisplay/CubeDisplay";
+import Loading from "@/components/common/Loading";
+import SolveTable from "@/components/solves/SolveTable";
+import BottomBar from "@/components/layout/BottomBar";
 // import { UserQuery } from "@/__generated__/graphql";
-const CubeDisplay = dynamic(
-  () => import("../components/cubeDisplay/CubeDisplay"),
-  {
-    ssr: false,
-  }
-);
-const inter = Inter({ subsets: ["latin"] });
 
+// const inter = Inter({ subsets: ["latin"] });
+type Props = {
+  settingData: SettingQueryQuery;
+};
 const Home = () => {
   const dispatch = useAppDispatch();
   const { data: session, status } = useSession();
   const userId = session?.user?.id;
+  const { data: setting, loading, error } = useQuery(SettingQueryDocument);
+  if (loading) return <Loading />;
+  console.log({ setting });
+  // const { data: solves, loading: loading2 } = useQuery(SolvesQueryDocument);
+  // const { data: sessions, loading: loading3 } = useQuery(CubeSessionsDocument);
+
   if (status === "loading") {
-    return <div>loading</div>;
+    return <Loading />;
   }
   if (status === "unauthenticated" || !userId) {
     return <div>unauthenticated</div>;
   }
   dispatch(setUser(userId));
   return (
-    <main className="flex flex-row bg-slate-900 text-yellow-50">
-      <div className="flex-1">
-        <div className="flex flews-row m-3">
-          <div className="flex-1">session</div>
-          <div className="mx3">session</div>
-          {/* <CubeSessionSelect /> */}
-        </div>
-        <div className="flex flex-col text-center ">
-          <TimerScrambleContainer />
-        </div>
-        {/* <MainTimerOptions /> */}
-      </div>
+    // <div className="flex h-full flex-col sm:flex-row bg-slate-900 text-yellow-50">
+    //   <div className="flex-1 flex flex-col">
+    //     <OptionsBar />
+    //     <div className="flex flex-1 flex-col justify-center items-center text-center">
+    //       <TimerScrambleContainer />
+    //     </div>
+    //   </div>
+    //   <div className="bg-dark-cyan w-80 h-full hidden sm:flex flex-col">
+    //     <RightSideBar />
+    //   </div>
+    //   <div className="bg-dark-cyan w-full sm:hidden"></div>
+    // </div>
+    <div className="flex h-full flex-col md:flex-row-reverse bg-base text-base">
       <RightSideBar />
-    </main>
+      <div className="flex flex-col flex-1">
+        {/* Main content header */}
+        <OptionsBar />
+        {/* Main content body (timer) */}
+        <TimerScrambleContainer />
+
+        <div className="md:hidden">
+          <BottomBar />
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -66,10 +87,7 @@ export const getServerSideProps = async (
 ) => {
   const client = initializeApollo();
   new Scrambow().get(1)[0].scramble_string;
-  // console.log("joe mama", { context });
   const session = await getSession(context);
-  console.log({ session });
-  console.log("123", session?.user?.id);
   if (!session?.user?.id) {
     return {
       redirect: {
@@ -83,15 +101,15 @@ export const getServerSideProps = async (
   //   query: SolvesQueryDocument,
   // });
   // const {
-  //   data: o,
+  //   data: settingData,
   //   loading: k,
   //   error: j,
   // } = await client.query({
   //   query: SettingQueryDocument,
   // });
-  // console.log({ o, k, j });
+  // console.log({ settingData });
   return {
-    props: { d: "1" },
+    props: { data: null },
   };
 };
 export default Home;

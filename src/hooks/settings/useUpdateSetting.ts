@@ -11,7 +11,6 @@ import {
 import { gql, useMutation, useQuery } from "@apollo/client";
 
 export const useUpdateSetting = () => {
-  console.log("useUpdateSetting");
   const [updateSettingMutation] = useMutation(UpdateSettingDocument, {
     update(cache, { data }) {
       console.log({ data });
@@ -48,12 +47,13 @@ export const useUpdateSetting = () => {
           ...input,
         },
       },
+
       optimisticResponse(vars) {
-        // merge the new input with the existing setting
         const updatedSetting = {
           ...setting,
           ...input,
-        };
+        } as Setting;
+        console.log({ updatedSetting });
         return {
           __typename: "Mutation",
           updateSetting: {

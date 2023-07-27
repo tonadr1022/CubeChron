@@ -40,10 +40,11 @@ import {
   HttpLink,
   InMemoryCache,
   NormalizedCacheObject,
+  makeVar,
 } from "@apollo/client";
 import { relayStylePagination } from "@apollo/client/utilities";
 import merge from "deepmerge";
-import isEqual from "lodash/isequal";
+import isEqual from "lodash/isEqual";
 
 export const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
 
@@ -56,18 +57,10 @@ const createApolloClient = () => {
       uri: "http://localhost:3000/api/graphql", // Server URL (must be absolute)
       // credentials: "same-origin", // Additional fetch() options like `credentials` or `headers`
     }),
-    cache: new InMemoryCache({
-      // typePolicies is not required to use Apollo with Next.js - only for doing pagination.
-      typePolicies: {
-        Query: {
-          fields: {
-            posts: relayStylePagination(),
-          },
-        },
-      },
-    }),
+    cache: new InMemoryCache({}),
   });
 };
+export const optimisticResponseVar = makeVar({});
 
 export const initializeApollo = (
   initialState: NormalizedCacheObject | null = null

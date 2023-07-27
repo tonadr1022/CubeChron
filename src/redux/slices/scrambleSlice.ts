@@ -15,7 +15,7 @@ interface ScrambleState {
 const getInitialState = () => {
   return {
     currentScramble: "",
-    scrambleType: "C333",
+    scrambleType: "333",
   };
 };
 

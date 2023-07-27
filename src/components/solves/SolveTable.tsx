@@ -6,59 +6,57 @@
 
 import { gql, useMutation, useQuery } from "@apollo/client";
 import SolveTableRow from "./SolveTableRow";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import {
   DeleteSolveDocument,
-  SolveTable_SolveFragment,
+  SettingQueryDocument,
+  Solve,
+  SolveFragment,
+  SolvesByCubeSessionDocument,
   SolvesQueryDocument,
   UpdateSolveDocument,
 } from "@/__generated__/graphql";
 import { useDeleteSolve } from "@/hooks/solves/useDeleteSolve";
+import { useUpdateSolve } from "@/hooks/solves/useCreateSolve";
+import { getCubeSessionTypeSolves } from "@/data/getCubeSessionTypeSolves";
 
-gql`
-  fragment SolveTable_Solve on Solve {
-    id
-    duration
-    dnf
-    plusTwo
-  }
-`;
-type Props = {
-  solves: SolveTable_SolveFragment[];
-};
+// gql`
+//   fragment SolveTable_Solve on Solve {
+//     id
+//     duration
+//     dnf
+//     plusTwo
+//   }
+// `;
+type Props = { solves: SolveFragment[] };
 
-const SolveTable: React.FC<Props> = ({ solves }: Props) => {
+const SolveTable = ({ solves }: Props) => {
   const deleteSolve = useDeleteSolve();
-  const [updateSolve] = useMutation(UpdateSolveDocument, {
-    refetchQueries: [{ query: SolvesQueryDocument }],
-  });
-  // const dispatch = useAppDispatch();
+  const updateSolve = useUpdateSolve();
+  console.log("tble");
   const onSolveDelete = useCallback(
     (solveId: string) => {
       deleteSolve(solveId);
     },
     [deleteSolve]
   );
-
   const onTogglePlusTwo = useCallback(
-    (solve: SolveTable_SolveFragment) => {
-      updateSolve({
-        variables: { id: solve.id, input: { plusTwo: !solve.plusTwo } },
-      });
+    (solve: SolveFragment) => {
+      updateSolve(solve, { id: solve.id, plusTwo: !solve.plusTwo });
+    },
+    [updateSolve]
+  );
+  const onToggleDnf = useCallback(
+    (solve: SolveFragment) => {
+      updateSolve(solve, { id: solve.id, dnf: !solve.dnf });
     },
     [updateSolve]
   );
 
-  const onToggleDnf = useCallback(
-    (solve: SolveTable_SolveFragment) => {
-      updateSolve({ variables: { id: solve.id, input: { dnf: !solve.dnf } } });
-    },
-    [updateSolve]
-  );
   const length = solves.length ? solves?.length : 0;
   const counts = Array.from(Array(length).keys(), (i) => length - i);
   return (
-    <div className="w-full p-2 bg-slate-800 flex flex-col overflow-y-auto h-1/3">
+    <div>
       {solves.map((solve, i) => (
         <SolveTableRow
           key={i}

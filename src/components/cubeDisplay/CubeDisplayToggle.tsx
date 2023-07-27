@@ -1,40 +1,45 @@
-import { SettingQueryDocument } from "@/__generated__/graphql";
+import {
+  SettingQueryDocument,
+  SettingQueryQuery,
+} from "@/__generated__/graphql";
 import { useUpdateSetting } from "@/hooks/settings/useUpdateSetting";
 import { useQuery } from "@apollo/client";
 import React from "react";
 
-type Props = {};
-
-const CubeDisplayToggle = (props: Props) => {
+const options = ["2D", "3D"];
+const CubeDisplayToggle = () => {
+  const { data: settingData, loading: loading } =
+    useQuery(SettingQueryDocument);
   const updateSetting = useUpdateSetting();
-  const { data: setting } = useQuery(SettingQueryDocument);
-  const settingId = setting?.setting?.id!;
-  const cubeSessionId = setting?.setting?.cubeSessionId!;
-  const cubeType = setting?.setting?.cubeType!;
+  if (loading) return <div>loading</div>;
 
-  const cubeDisplayDimension = setting?.setting?.cubeDisplayDimension!;
-  const handleUpdateSetting = (
-    e: React.MouseEvent<HTMLLIElement, MouseEvent>
-  ) => {
+  const { cubeDisplayDimension } = settingData!.setting;
+
+  const handleUpdateSetting = (e: {
+    currentTarget: { getAttribute: (arg0: string) => any };
+  }) => {
     const value = e.currentTarget.getAttribute("value");
     console.log(value);
-    updateSetting(setting!, { cubeDisplayDimension: value!, id: settingId });
+    updateSetting(settingData!, {
+      cubeDisplayDimension: value!,
+      id: settingData!.setting.id,
+    });
   };
   return (
-    <div className="dropdown">
-      <label tabIndex={0} className="btn btn-sm">
-        {cubeDisplayDimension}
-      </label>
-      <ul
-        tabIndex={0}
-        className="dropdown-content z-[1] menu shadow bg-base-100 rounded-box w-20">
-        <li value={"2D"} onClick={(e) => handleUpdateSetting(e)}>
-          2D
-        </li>
-        <li value={"3D"} onClick={handleUpdateSetting}>
-          3D
-        </li>
-      </ul>
+    <div className="join text-center my-1">
+      {options.map((option) => (
+        <input
+          key={option}
+          type="radio"
+          name="options"
+          data-title={option}
+          className="join-item btn btn-xs"
+          value={option}
+          aria-label={option}
+          checked={cubeDisplayDimension === option}
+          onChange={(e) => handleUpdateSetting(e)}
+        />
+      ))}
     </div>
   );
 };

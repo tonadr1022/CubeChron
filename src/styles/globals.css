@@ -2,33 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
 scramble-display {
-  width: 320px;
-  height: 240px;
-  resize: both;
+  @apply bg-base-300 rounded-lg;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.scramble-text {
+  opacity: 1;
+  transition: all 0.15s ease-in-out;
+  width: calc(95% - 40px);
+  min-width: 100px;
+  text-align: center;
+  resize: none;
   overflow: hidden;
+  @apply bg-base-100;
 }

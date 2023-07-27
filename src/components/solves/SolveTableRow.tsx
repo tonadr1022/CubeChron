@@ -1,12 +1,12 @@
 import { formatTime } from "../../utils/formatTime";
 import Button from "./SolveTableButton";
 import clsx from "clsx";
-import { Solve, SolveTable_SolveFragment } from "@/__generated__/graphql";
-
+import { Solve, SolveFragment } from "@/__generated__/graphql";
+import { FaTrash } from "react-icons/fa6";
 interface Props {
-  solve: SolveTable_SolveFragment;
-  onTogglePlusTwo: (solve: SolveTable_SolveFragment) => void;
-  onToggleDnf: (solve: SolveTable_SolveFragment) => void;
+  solve: SolveFragment;
+  onTogglePlusTwo: (solve: SolveFragment) => void;
+  onToggleDnf: (solve: SolveFragment) => void;
   onDelete: (solveId: string) => void;
   solveCount: number;
 }
@@ -18,43 +18,57 @@ const SolveTableRow = ({
   onDelete,
   solveCount,
 }: Props) => {
+  if (solveCount === 77) {
+    console.log(solveCount, solve.duration, solve.dnf, solve.plusTwo);
+  }
   //   const record = useAppSelector((state) => selectRecordById(state, recordId));
-  const color = solve.dnf ? `red` : solve.plusTwo ? "orange" : "green";
   return (
     solve && (
-      <div className="w-full flex flex-row py-2" key={solve.id}>
-        <div className="px-4 w-4 font-bold  flex items-center">
+      <div className="w-full flex flex-row pb-1 items-center" key={solve.id}>
+        <div className=" pl-4 pr-8 w-6 font-bold flex items-center">
           {solveCount}.
         </div>
         <div
           className={clsx(
-            "px-4 flex-1 font-medium transition flex items-center",
-            `text-${color}-500`
+            "px-4 flex-1 font-medium transition flex items-center", // Remove the comma here
+            solve.dnf
+              ? "text-error"
+              : solve.plusTwo
+              ? "text-warning"
+              : "text-success"
+            // solve.plusTwo && "text-warning"
           )}>
           {formatTime(solve.duration, 3)}
         </div>
         <div className="flex flex-row">
           <div>
-            <Button
-              className={clsx("h-8 px-2 mx-1", "bg-plus2")}
+            <button
+              className={clsx(
+                "btn btn-xs bg-base-300 border-none hover:bg-base-100 transition-none",
+                solve.plusTwo && "bg-warning text-neutral"
+              )}
               onClick={() => onTogglePlusTwo(solve)}>
               +2
-            </Button>
+            </button>
           </div>
           <div>
-            <Button
-              className={clsx("h-8 px-2 mx-1")}
+            <button
+              className={clsx(
+                "btn btn-xs bg-base-300 border-none hover:bg-base-100 transition-none"
+              )}
               onClick={() => onDelete(solve.id)}>
-              del
-            </Button>
+              <FaTrash />
+            </button>
           </div>
-          <div>{solve.plusTwo && "d"}</div>
           <div>
-            <Button
-              className={clsx("h-8 px-2 mx-1", "bg-dnf")}
+            <button
+              className={clsx(
+                "btn btn-xs bg-base-300 border-none hover:bg-base-100",
+                solve.dnf && "bg-error text-neutral"
+              )}
               onClick={() => onToggleDnf(solve)}>
               DNF
-            </Button>
+            </button>
           </div>
         </div>
       </div>

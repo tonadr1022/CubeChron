@@ -71,6 +71,7 @@ builder.prismaObject("Setting", {
     }),
     userId: t.exposeString("userId", { nullable: true }),
     focusMode: t.exposeBoolean("focusMode", { nullable: true }),
+    barView: t.exposeString("barView"),
     cubeType: t.exposeString("cubeType", { nullable: true }),
     cubeDisplayDimension: t.exposeString("cubeDisplayDimension"),
     cubeSessionId: t.exposeString("cubeSessionId", { nullable: true }),
@@ -90,7 +91,7 @@ builder.prismaObject("CubeSession", {
       nullable: true,
     }),
     name: t.exposeString("name", { nullable: true }),
-
+    cubeType: t.exposeString("cubeType", { nullable: true }),
     userId: t.exposeString("userId", { nullable: true }),
     user: t.relation("user"),
     notes: t.exposeString("notes", { nullable: true }),
@@ -160,25 +161,14 @@ builder.queryType({
           where: { id: args.id as string },
         }),
     }),
-    // solvesByCubeSession: t.prismaField({
-    //   type: ["Solve"],
-    //   args: { id: t.arg.string() },
-    //   resolve: async (query, root, args, ctx, info) => {
-    //     const cubeSession = await prisma.cubeSession.findUniqueOrThrow({
-    //       ...query,
-    //       where: { id: args.id as string },
-    //       include: { solves: true },
-    //     });
-    //     return cubeSession.solves;
-    //   },
-    // }),
   }),
 });
 
-export const CubeSessionInput = builder.inputType("CubeSessionInput", {
+export const CreateCubeSessionInput = builder.inputType("CubeSessionInput", {
   fields: (t) => ({
     name: t.string({ required: true }),
-    notes: t.string(),
+    cubeType: t.string({ required: true }),
+    notes: t.string({ required: true }),
   }),
 });
 
@@ -187,6 +177,7 @@ export const CubeSessionUpdateInput = builder.inputType(
   {
     fields: (t) => ({
       id: t.string({ required: true }),
+      cubeType: t.string(),
       name: t.string(),
       notes: t.string(),
     }),
@@ -198,6 +189,7 @@ export const UpdateSettingInput = builder.inputType("UpdateSettingInput", {
     id: t.string({ required: true }),
     userId: t.string(),
     focusMode: t.boolean(),
+    barView: t.string(),
     cubeType: t.string(),
     cubeDisplayDimension: t.string(),
     cubeSessionId: t.string(),
@@ -279,7 +271,7 @@ builder.mutationType({
     createCubeSession: t.prismaField({
       type: "CubeSession",
       args: {
-        input: t.arg({ type: CubeSessionInput, required: true }),
+        input: t.arg({ type: CreateCubeSessionInput, required: true }),
       },
       resolve: (query, _, args, ctx) =>
         prisma.cubeSession.create({
@@ -331,32 +323,11 @@ builder.mutationType({
           where: { id: id },
           data: { ...updateData },
         });
-        console.log({ setting });
         return setting;
       },
     }),
   }),
 });
-
-// builder.queryField("cubeSession", (t) =>
-//   t.prismaField({
-//     type: "CubeSession",
-//     args: {
-//       id: t.arg.id(),
-//     },
-//     resolve: async (query, root, args, ctx, info) => {
-//       const cubeSession = await prisma.cubeSession.findUniqueOrThrow({
-//         where: {
-//           id: args.id as string,
-//         },
-//         include: {
-//           solves: true,
-//         },
-//       });
-//       return cubeSession;
-//     },
-//   })
-// );
 
 const schema = builder.toSchema();
 writeFileSync(resolve(__dirname, "../schema.graphql"), printSchema(schema));

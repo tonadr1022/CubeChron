@@ -1,18 +1,23 @@
 import { Scrambow } from "scrambow";
 // import { CubeTypeKey } from "@/shared/types";
 interface IGetScramble {
-  scrambleType: String;
+  cubeType: String;
   numScrambles?: number;
 }
-export const getScramble = ({ scrambleType }: IGetScramble): string => {
+export const getScramble = ({ cubeType }: IGetScramble): string => {
   let scramble = "";
-  return new Scrambow().get(1)[0].scramble_string;
-  switch (scrambleType) {
-    case "333":
-      scramble = new Scrambow().get(1)[0].scramble_string;
-      break;
+  // return new Scrambow().get(1)[0].scramble_string;
+  switch (cubeType) {
     case "222":
       scramble = new Scrambow().setType("222").get(1)[0].scramble_string;
+      break;
+    case "333":
+    case "333bf":
+    case "333fm":
+    case "333oh":
+    case "333ft":
+    case "333mbf":
+      scramble = new Scrambow().setType("333").get(1)[0].scramble_string;
       break;
     case "444":
     case "444bf":
@@ -23,9 +28,11 @@ export const getScramble = ({ scrambleType }: IGetScramble): string => {
       scramble = new Scrambow().setType("555").get(1)[0].scramble_string; // 40
       break;
     case "666":
+    case "666oh":
       scramble = new Scrambow().setType("666").get(1)[0].scramble_string; // 40
       break;
     case "777":
+    case "777oh":
       scramble = new Scrambow().setType("777").get(1)[0].scramble_string; // 40
       break;
     case "skewb":
@@ -41,7 +48,7 @@ export const getScramble = ({ scrambleType }: IGetScramble): string => {
       scramble = new Scrambow().setType("sq1").get(1)[0].scramble_string; // 40
       break;
     default:
-      return "";
+      return "No Scramble";
   }
   return scramble;
 };

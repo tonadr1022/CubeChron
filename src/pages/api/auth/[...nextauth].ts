@@ -93,11 +93,13 @@ export const authOptions: NextAuthOptions = {
             create: {
               id: randomKey,
               name: "Default",
+              cubeType: "333",
             },
           },
           setting: {
             create: {
               cubeType: "333",
+              barView: "bottom",
               cubeSessionId: randomKey,
             },
           },
@@ -107,6 +109,7 @@ export const authOptions: NextAuthOptions = {
           cubeSessions: true,
         },
       });
+      console.log({ u });
       return true;
     },
     session: ({ session, token }) => {

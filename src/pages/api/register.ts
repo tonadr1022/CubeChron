@@ -10,7 +10,6 @@ export default async function handler(
     const body = req.body;
 
     const { name, email, password } = body;
-    console.log({ body });
     if (!name || !email || !password) {
       return res.status(400).json({ message: "Please enter all fields" });
     }

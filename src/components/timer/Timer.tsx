@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useSpaceBarDown } from "@/hooks/useSpaceBarDown";
 import { useSpaceBarUp } from "@/hooks/useSpaceBarUp";
 import { getScramble } from "@/utils/getScramble";
@@ -11,7 +11,10 @@ import {
 } from "@/redux/slices/timerSlice";
 import { useQuery } from "@apollo/client";
 import DurationDisplay from "./DurationDisplay";
+
 import { nanoid } from "@reduxjs/toolkit";
+
+import { selectUser } from "@/redux/slices/userSlice";
 import {
   CreateSolveInput,
   SettingQueryDocument,
@@ -19,11 +22,12 @@ import {
 import { useCreateSolve } from "@/hooks/solves/useCreateSolve";
 
 const Timer = () => {
+  const userId = useAppSelector(selectUser);
+
   const { timerState, timerTimeoutId, timerIntervalId } = useAppSelector(
     (state) => state.timer
   );
   const { data, loading, error } = useQuery(SettingQueryDocument);
-  console.log(data);
   const cubeSessionId = data?.setting?.cubeSessionId!;
   const cubeType = data?.setting?.cubeType!;
 
@@ -37,7 +41,7 @@ const Timer = () => {
 
   const updateTimer = (start: number) => {
     const id = setInterval(() => {
-      setDuration(Date.now() - start);
+      setDuration((Date.now() - start) / 1000);
     }, 10) as unknown as number;
     dispatch(setTimerIntervalId(id));
   };
@@ -56,14 +60,9 @@ const Timer = () => {
         plusTwo: false,
         scramble: currentScramble,
       };
+      console.log({ input });
       createSolve(input), dispatch(setTimerState("stalling"));
-      dispatch(
-        setCurrentScramble(
-          getScramble({
-            scrambleType: scrambleType,
-          })
-        )
-      );
+      dispatch(setCurrentScramble(getScramble({ cubeType })));
     } else if (timerState === "initial" || timerState === "paused") {
       // timer at 0, ready to turn red before starting
       setDuration(0);
@@ -92,13 +91,9 @@ const Timer = () => {
     }
   };
 
-  useSpaceBarDown(() => {
-    handleKeyDown();
-  });
+  useSpaceBarDown(handleKeyDown);
 
-  useSpaceBarUp(() => {
-    handleKeyUp();
-  });
+  useSpaceBarUp(handleKeyUp);
 
   return (
     <>
