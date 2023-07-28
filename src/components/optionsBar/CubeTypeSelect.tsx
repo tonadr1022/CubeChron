@@ -5,13 +5,12 @@ import { CUBE_TYPE_OPTIONS } from "@/constants/constants";
 import clsx from "clsx";
 import { useUpdateSetting } from "@/hooks/settings/useUpdateSetting";
 import { handleDropdownOptionClick } from "@/utils/handleDropdownOptionClick";
-
-type Props = {};
+import Loading from "../common/Loading";
 
 const CubeTypeSelect = () => {
   const updateSetting = useUpdateSetting();
   const { data: setting, loading: loading } = useQuery(SettingQueryDocument);
-  if (loading) return <div>loading</div>;
+  if (loading) return <Loading />;
   const cubeType = setting?.setting.cubeType!;
   const handleSettingUpdate = (
     e: React.MouseEvent<HTMLLIElement, MouseEvent>
@@ -26,7 +25,7 @@ const CubeTypeSelect = () => {
 
   return (
     <>
-      <div className={clsx("dropdown dropdown-end ")}>
+      <div className="dropdown dropdown-end ">
         <div
           tabIndex={0}
           className="m-1 btn btn-xs bg-base-300"

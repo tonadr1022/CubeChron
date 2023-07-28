@@ -5,8 +5,10 @@ export const getCubeSessionTypeSolves = (
   cubeSessionId: string,
   cubeType: string
 ) => {
-  return solves.filter(
-    (solve) =>
-      solve.cubeSessionId === cubeSessionId && solve.cubeType === cubeType
-  );
+  return solves
+    .filter(
+      (solve) =>
+        solve.cubeSessionId === cubeSessionId && solve.cubeType === cubeType
+    )
+    .reverse();
 };

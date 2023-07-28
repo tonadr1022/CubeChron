@@ -20,7 +20,6 @@ import {
   SolvesQueryDocument,
 } from "@/__generated__/graphql";
 import { useAppDispatch } from "@/hooks/reduxHooks";
-import { setUser } from "@/redux/slices/userSlice";
 import RightSideBar from "@/components/layout/RightSideBar";
 import { Scrambow } from "scrambow";
 import TimerScrambleContainer from "@/components/timer/TimerScrambleContainer";
@@ -30,6 +29,8 @@ import CubeDisplay from "@/components/cubeDisplay/CubeDisplay";
 import Loading from "@/components/common/Loading";
 import SolveTable from "@/components/solves/SolveTable";
 import BottomBar from "@/components/layout/BottomBar";
+import { purgeStoredState } from "redux-persist";
+import { persistConfig } from "@/redux/store";
 // import { UserQuery } from "@/__generated__/graphql";
 
 // const inter = Inter({ subsets: ["latin"] });
@@ -37,22 +38,20 @@ type Props = {
   settingData: SettingQueryQuery;
 };
 const Home = () => {
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const { data: session, status } = useSession();
   const userId = session?.user?.id;
   const { data: setting, loading, error } = useQuery(SettingQueryDocument);
   if (loading) return <Loading />;
-  console.log({ setting });
   // const { data: solves, loading: loading2 } = useQuery(SolvesQueryDocument);
   // const { data: sessions, loading: loading3 } = useQuery(CubeSessionsDocument);
-
   if (status === "loading") {
     return <Loading />;
   }
   if (status === "unauthenticated" || !userId) {
     return <div>unauthenticated</div>;
   }
-  dispatch(setUser(userId));
+  // dispatch(setUser(userId));
   return (
     // <div className="flex h-full flex-col sm:flex-row bg-slate-900 text-yellow-50">
     //   <div className="flex-1 flex flex-col">
@@ -68,6 +67,7 @@ const Home = () => {
     // </div>
     <div className="flex h-full flex-col md:flex-row-reverse bg-base text-base">
       <RightSideBar />
+
       <div className="flex flex-col flex-1">
         {/* Main content header */}
         <OptionsBar />

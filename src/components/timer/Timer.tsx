@@ -13,8 +13,6 @@ import { useQuery } from "@apollo/client";
 import DurationDisplay from "./DurationDisplay";
 
 import { nanoid } from "@reduxjs/toolkit";
-
-import { selectUser } from "@/redux/slices/userSlice";
 import {
   CreateSolveInput,
   SettingQueryDocument,
@@ -22,8 +20,6 @@ import {
 import { useCreateSolve } from "@/hooks/solves/useCreateSolve";
 
 const Timer = () => {
-  const userId = useAppSelector(selectUser);
-
   const { timerState, timerTimeoutId, timerIntervalId } = useAppSelector(
     (state) => state.timer
   );

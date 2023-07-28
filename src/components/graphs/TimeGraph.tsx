@@ -1,12 +1,8 @@
-import resolveConfig from "tailwindcss/resolveConfig";
-import tailwindConfig from "../../..//tailwind.config.js";
 import { SolveFragment } from "@/__generated__/graphql";
-import React, { useMemo } from "react";
+import React from "react";
 import {
   LineChart,
   Line,
-  CartesianGrid,
-  XAxis,
   YAxis,
   ResponsiveContainer,
   Tooltip,
@@ -16,8 +12,10 @@ import {
   ValueType,
   NameType,
 } from "recharts/types/component/DefaultTooltipContent";
-import { useAppSelector } from "../../hooks/reduxHooks";
-
+type ToolTipProps = {
+  active?: boolean;
+  payload?: SolveFragment;
+};
 const CustomTooltip = ({
   active,
   payload,
@@ -35,22 +33,19 @@ const CustomTooltip = ({
   );
 };
 
-type Props = { solves: SolveFragment[]; elHeight?: number | null };
-
-const SolvesOverTime = ({ solves, elHeight }: Props) => {
-  const reversed = useMemo(() => [...solves].reverse(), [solves]);
+type Props = { solves: SolveFragment[] };
+const SolvesOverTime = ({ solves }: Props) => {
   return (
     <ResponsiveContainer
       width={"100%"}
-      height={elHeight!}
+      height="100%"
       className="bg-base-300 rounded-lg">
-      <LineChart data={reversed} className="-ml-4">
-        <Line dot={false} dataKey="duration" stroke="#36d399" strokeWidth={5} />
+      <LineChart data={solves} className="-ml-4">
+        <Line dot={false} dataKey="duration" stroke="#8884d8" strokeWidth={5} />
         <YAxis
           tickCount={6}
           padding={{ top: 0, bottom: 0 }}
           style={{ margin: 1 }}
-          stroke={"#36d399"}
           axisLine={false}
           tickLine={false}
           // tick={CustomYAxisTick}

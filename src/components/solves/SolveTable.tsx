@@ -12,7 +12,6 @@ import {
   SettingQueryDocument,
   Solve,
   SolveFragment,
-  SolvesByCubeSessionDocument,
   SolvesQueryDocument,
   UpdateSolveDocument,
 } from "@/__generated__/graphql";
@@ -33,7 +32,6 @@ type Props = { solves: SolveFragment[] };
 const SolveTable = ({ solves }: Props) => {
   const deleteSolve = useDeleteSolve();
   const updateSolve = useUpdateSolve();
-  console.log("tble");
   const onSolveDelete = useCallback(
     (solveId: string) => {
       deleteSolve(solveId);
@@ -52,11 +50,10 @@ const SolveTable = ({ solves }: Props) => {
     },
     [updateSolve]
   );
-
   const length = solves.length ? solves?.length : 0;
   const counts = Array.from(Array(length).keys(), (i) => length - i);
   return (
-    <div>
+    <div className="w-full p-2 flex flex-col bg-base-300 rounded-lg">
       {solves.map((solve, i) => (
         <SolveTableRow
           key={i}

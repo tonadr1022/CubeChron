@@ -1,9 +1,13 @@
+import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
+import { setTheme } from "@/redux/slices/settingSlice";
 import { useEffect, useState } from "react";
 
 const ThemeSwitch = () => {
-  const [theme, setTheme] = useState("light");
+  const theme = useAppSelector((state) => state.setting.theme);
+  const dispatch = useAppDispatch();
+
   const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
+    dispatch(setTheme(theme === "dark" ? "light" : "dark"));
   };
   // initially set the theme and "listen" for changes to apply them to the HTML tag
   useEffect(() => {

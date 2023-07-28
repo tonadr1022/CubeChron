@@ -24,7 +24,7 @@ const SolveTableRow = ({
   //   const record = useAppSelector((state) => selectRecordById(state, recordId));
   return (
     solve && (
-      <div className="w-full flex flex-row pb-1 items-center" key={solve.id}>
+      <div className="w-full flex flex-row py-0.5 items-center" key={solve.id}>
         <div className=" pl-4 pr-8 w-6 font-bold flex items-center">
           {solveCount}.
         </div>

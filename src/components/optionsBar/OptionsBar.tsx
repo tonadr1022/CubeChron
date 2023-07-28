@@ -5,6 +5,7 @@ import CubeDisplayToggle from "../cubeDisplay/CubeDisplayToggle";
 import { SettingQueryQuery } from "@/__generated__/graphql";
 import CubeTypeSelect from "./CubeTypeSelect";
 import ModuleViewSelect from "./ModuleViewSelect";
+import ModuleCountSelect from "./ModuleCountSelect";
 
 const OptionsBar = () => {
   return (
@@ -14,6 +15,9 @@ const OptionsBar = () => {
       </div>
       <div className="mx3">
         <CubeTypeSelect />
+      </div>
+      <div className="mx3">
+        <ModuleCountSelect />
       </div>
       <div>
         <ModuleViewSelect />

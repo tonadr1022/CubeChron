@@ -20,3 +20,10 @@ export const CUBE_TYPE_OPTIONS = {
   "555bf": "5x5 Blindfolded",
   "333mbf": "3x3 Multi-Blind",
 };
+
+export const MODULE_OPTIONS = {
+  solves: "Solves",
+  timeGraph: "Time Graph",
+  cubeDisplay: "Cube Display",
+  stats: "Stats",
+};

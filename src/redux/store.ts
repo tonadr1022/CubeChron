@@ -1,27 +1,32 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import scrambleSlice from "./slices/scrambleSlice";
 import timerSlice from "./slices/timerSlice";
-import userSlice from "./slices/userSlice";
+// import userSlice from "./slices/userSlice";
+import settingSlice from "./slices/settingSlice";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
-import thunk from "redux-thunk";
+export const persistConfig = {
+  key: "root",
+  storage,
+};
 
 const rootReducer = combineReducers({
   scramble: scrambleSlice,
   timer: timerSlice,
-  user: userSlice,
+  setting: settingSlice,
 });
 
-export const makeStore = () => {
-  return configureStore({
-    reducer: rootReducer,
-    devTools: true,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
-  });
-};
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+export const store = configureStore({
+  reducer: persistedReducer,
+  devTools: true,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ serializableCheck: false }),
+});
 
-export const store = makeStore();
+export const persistor = persistStore(store);
 
-export type AppStore = ReturnType<typeof makeStore>;
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
 // Inferred type
