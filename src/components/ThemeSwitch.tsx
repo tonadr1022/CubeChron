@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
 import { setTheme } from "@/redux/slices/settingSlice";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const ThemeSwitch = () => {
   const theme = useAppSelector((state) => state.setting.theme);

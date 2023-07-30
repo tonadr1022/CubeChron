@@ -16,7 +16,7 @@ const DurationDisplay = ({ duration }: Props) => {
           state === "ready" && "text-success",
           state === "stalling" && "text-warning"
         ),
-        "text-8xl font-mono font-semibold w-75"
+        "text-6xl font-mono font-semibold w-75 "
       )}>
       {formatTime(duration ? duration : 0, digits)}
     </h2>

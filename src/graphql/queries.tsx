@@ -49,6 +49,8 @@ gql`
     cubeSessions {
       id
       name
+      notes
+      createdAt
     }
   }
 `;

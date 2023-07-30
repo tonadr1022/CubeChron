@@ -9,7 +9,7 @@ import {
   setTimerTimeoutId,
   setTimerIntervalId,
 } from "@/redux/slices/timerSlice";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import DurationDisplay from "./DurationDisplay";
 
 import { nanoid } from "@reduxjs/toolkit";
@@ -18,20 +18,21 @@ import {
   SettingQueryDocument,
 } from "@/__generated__/graphql";
 import { useCreateSolve } from "@/hooks/solves/useCreateSolve";
+import { useSession } from "next-auth/react";
+import { addSolve } from "@/redux/slices/solvesSlice";
+import { useGetSetting } from "@/hooks/settings/useGetSetting";
 
 const Timer = () => {
+  const { isAuth } = useAppSelector((state) => state.user);
   const { timerState, timerTimeoutId, timerIntervalId } = useAppSelector(
     (state) => state.timer
   );
-  const { data, loading, error } = useQuery(SettingQueryDocument);
-  const cubeSessionId = data?.setting?.cubeSessionId!;
-  const cubeType = data?.setting?.cubeType!;
+  const setting = useGetSetting();
+  const cubeSessionId = setting?.cubeSessionId!;
+  const cubeType = setting?.cubeType!;
 
-  const { currentScramble, scrambleType } = useAppSelector(
-    (state) => state.scramble
-  );
+  const { currentScramble } = useAppSelector((state) => state.scramble);
   const dispatch = useAppDispatch();
-
   const [duration, setDuration] = useState<number>(0);
   const createSolve = useCreateSolve();
 
@@ -56,8 +57,13 @@ const Timer = () => {
         plusTwo: false,
         scramble: currentScramble,
       };
-      console.log({ input });
-      createSolve(input), dispatch(setTimerState("stalling"));
+      if (isAuth) {
+        createSolve(input);
+      } else {
+        dispatch(addSolve({ ...input, createdAt: new Date().toISOString() }));
+      }
+
+      dispatch(setTimerState("stalling"));
       dispatch(setCurrentScramble(getScramble({ cubeType })));
     } else if (timerState === "initial" || timerState === "paused") {
       // timer at 0, ready to turn red before starting

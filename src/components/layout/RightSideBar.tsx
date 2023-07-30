@@ -32,8 +32,7 @@ const RightSideBar = () => {
   //  const { moduleOne } = useAppSelector((state) => state.setting);
   const containerRef = useRef<HTMLDivElement>(null);
   const { modules, moduleCount } = useAppSelector((state) => state.setting);
-
-  const [elHeight, setElHeight] = useState<number | null>(
+  const [elHeight, setElHeight] = useState<number>(
     Math.round(window.innerHeight / moduleCount)
   ); // State to hold the height of el
   // Update elHeight state on window resize
@@ -46,7 +45,6 @@ const RightSideBar = () => {
     // if (typeof window !== "undefined") {
     window.addEventListener("resize", handleResize);
     // }
-
     // Clean up the event listener on unmount
     return () => {
       // if (typeof window !== "undefined") {
@@ -54,47 +52,85 @@ const RightSideBar = () => {
       // }
     };
   }, [containerRef, moduleCount]);
-  const { solves, loading } = useSessionTypeSolves();
-  // const stats = useMemo(() => calculateStats(solves), [solves]);
-  // console.log(stats, solves);
+  const { solves, loading, error } = useSessionTypeSolves();
   const moduleIndices = Array.from(
     { length: moduleCount },
     (_, index) => index
   );
-  // map for i in range of module count instead of module indices
+  if (loading) return <RightSideBarSkeleton />;
+  if (error) return <div>Error</div>;
   return (
-    <Suspense fallback={<Loading />}>
-      <div
-        className="hidden md:flex md:flex-col w-80 p-2 box-content bg-base-200"
-        ref={containerRef}>
-        {moduleIndices.map((i) => (
+    // <Suspense fallback={<Loading />}>
+    <div
+      className="hidden md:flex md:flex-col p-2 box-content bg-base-200 w-64"
+      ref={containerRef}>
+      {/* {moduleIndices.map((i) => (
+        <div
+          key={i}
+          className={clsx(
+            "h-full relative group my-2 rounded-lg",
+            modules[i] === "solves" && "overflow-y-auto"
+          )}>
+          {modules[i] === "timeGraph" && (
+            <SolvesOverTime elHeight={elHeight} solves={solves} />
+          )}
+          {modules[i] === "stats" && <StatsModule solves={solves} />}
+          {modules[i] === "solves" && (
+            <div className="h-full overflow-y-auto">
+              <SolveTableMemoized solves={solves} />
+            </div>
+          )}
+          {modules[i] === "cubeDisplay" && <CubeDisplay elHeight={elHeight} />}
+          <div className="top-0 left-0 z-50 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <ModuleSelect moduleNumber={i} />
+          </div>
+        </div>
+      ))} */}
+      {moduleIndices.map((i) => {
+        return (
           <div
             key={i}
             className={clsx(
               "h-full relative group my-2 rounded-lg",
               modules[i] === "solves" && "overflow-y-auto"
             )}>
-            {modules[i] === "timeGraph" && (
-              <SolvesOverTime elHeight={elHeight} solves={solves} />
-            )}
-            {modules[i] === "stats" && <StatsModule />}
-            {modules[i] === "solves" && (
-              <div className="h-full overflow-y-auto">
-                <SolveTableMemoized solves={solves} />
-              </div>
-            )}
-            {modules[i] === "cubeDisplay" && (
-              <CubeDisplay elHeight={elHeight} />
-            )}
+            {(() => {
+              if (
+                modules[i] !== "cubeDisplay" &&
+                modules[i] !== "stats" &&
+                solves.length <= 0
+              )
+                return (
+                  <div className="w-full h-full flex items-center justify-center bg-base-300 rounded-lg">
+                    No Solves to Display
+                  </div>
+                );
+              switch (modules[i]) {
+                case "timeGraph":
+                  return <SolvesOverTime elHeight={elHeight} solves={solves} />;
+                case "stats":
+                  return <StatsModule solves={solves} />;
+                case "solves":
+                  return (
+                    <div className="h-full overflow-y-auto">
+                      <SolveTableMemoized solves={solves} />
+                    </div>
+                  );
+                case "cubeDisplay":
+                  return <CubeDisplay elHeight={elHeight} />;
+                default:
+                  return null;
+              }
+            })()}
             <div className="top-0 left-0 z-50 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-200">
               <ModuleSelect moduleNumber={i} />
             </div>
           </div>
-        ))}
-      </div>
-    </Suspense>
+        );
+      })}
+    </div>
+    // </Suspense>
   );
-  // return <div>RightSideBar</div>;
 };
 
 export default RightSideBar;

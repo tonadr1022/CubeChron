@@ -51,14 +51,13 @@ const CubeSessionSelect = () => {
           tabIndex={0}
           className={clsx(
             "p-2 shadow menu dropdown-content bg-base-100 rounded-box w-40 max-h-64 overflow-y-auto block"
-            //   { hidden: !open }
           )}>
           {cubeSessions.map((session) => (
             <li
               value={session.id}
               key={session.id}
               onClick={handleSettingUpdate}>
-              <a className="hover:bg-base-300">{session.name}</a>
+              <button className="hover:bg-base-300">{session.name}</button>
             </li>
           ))}
           <li value={"add"} onClick={handleClick}>

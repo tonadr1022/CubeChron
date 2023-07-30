@@ -19,7 +19,7 @@ import {
   SettingQueryQuery,
   SolvesQueryDocument,
 } from "@/__generated__/graphql";
-import { useAppDispatch } from "@/hooks/reduxHooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
 import RightSideBar from "@/components/layout/RightSideBar";
 import { Scrambow } from "scrambow";
 import TimerScrambleContainer from "@/components/timer/TimerScrambleContainer";
@@ -31,6 +31,9 @@ import SolveTable from "@/components/solves/SolveTable";
 import BottomBar from "@/components/layout/BottomBar";
 import { purgeStoredState } from "redux-persist";
 import { persistConfig } from "@/redux/store";
+import Head from "next/head";
+import ThemeSwitch from "@/components/ThemeSwitch";
+import { setIsAuth } from "@/redux/slices/userSlice";
 // import { UserQuery } from "@/__generated__/graphql";
 
 // const inter = Inter({ subsets: ["latin"] });
@@ -38,76 +41,70 @@ type Props = {
   settingData: SettingQueryQuery;
 };
 const Home = () => {
-  // const dispatch = useAppDispatch();
-  const { data: session, status } = useSession();
-  const userId = session?.user?.id;
-  const { data: setting, loading, error } = useQuery(SettingQueryDocument);
-  if (loading) return <Loading />;
-  // const { data: solves, loading: loading2 } = useQuery(SolvesQueryDocument);
-  // const { data: sessions, loading: loading3 } = useQuery(CubeSessionsDocument);
-  if (status === "loading") {
-    return <Loading />;
+  const dispatch = useAppDispatch();
+  const { focusMode } = useAppSelector((state) => state.general);
+  const theme = useAppSelector((state) => state.setting.theme);
+  useEffect(() => {
+    document.querySelector("html")!.setAttribute("data-theme", theme);
+  }, [theme]);
+  const { status } = useSession();
+  if (status === "loading") return <Loading />;
+  if (status === "authenticated") {
+    dispatch(setIsAuth(true));
+  } else {
+    dispatch(setIsAuth(false));
   }
-  if (status === "unauthenticated" || !userId) {
-    return <div>unauthenticated</div>;
-  }
-  // dispatch(setUser(userId));
   return (
-    // <div className="flex h-full flex-col sm:flex-row bg-slate-900 text-yellow-50">
-    //   <div className="flex-1 flex flex-col">
-    //     <OptionsBar />
-    //     <div className="flex flex-1 flex-col justify-center items-center text-center">
-    //       <TimerScrambleContainer />
-    //     </div>
-    //   </div>
-    //   <div className="bg-dark-cyan w-80 h-full hidden sm:flex flex-col">
-    //     <RightSideBar />
-    //   </div>
-    //   <div className="bg-dark-cyan w-full sm:hidden"></div>
-    // </div>
-    <div className="flex h-full flex-col md:flex-row-reverse bg-base text-base">
-      <RightSideBar />
-
-      <div className="flex flex-col flex-1">
-        {/* Main content header */}
-        <OptionsBar />
-        {/* Main content body (timer) */}
-        <TimerScrambleContainer />
-
-        <div className="md:hidden">
-          <BottomBar />
+    <>
+      <Head>
+        <title>CubeChron</title>
+      </Head>
+      {/* {status === "authenticated" ? ( */}
+      <>
+        <div className="flex h-full flex-col md:flex-row-reverse bg-base text-base">
+          {!focusMode && <RightSideBar />}
+          <div className="flex flex-col flex-1">
+            {/* Main content header */}
+            <OptionsBar />
+            {/* Main content body (timer) */}
+            <TimerScrambleContainer />
+            {!focusMode && (
+              <div className="md:hidden">
+                <BottomBar />
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-    </div>
+      </>
+      {/* ) : (
+        <div className="prose flex h-full min-w-full flex-col bg-base text-base  items-center">
+          <Image
+            src={"/pwa-512x512.png"}
+            alt="CubeChron logo"
+            width={300}
+            height={300}
+          />
+          <h1>Welcome to CubeChron</h1>
+        </div>
+      )} */}
+    </>
   );
 };
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  const client = initializeApollo();
+  // const client = initializeApollo();
   new Scrambow().get(1)[0].scramble_string;
-  const session = await getSession(context);
-  if (!session?.user?.id) {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
-  }
-  // // need to get user id from session but can't
-  // const { data, loading, error } = await client.query({
-  //   query: SolvesQueryDocument,
-  // });
-  // const {
-  //   data: settingData,
-  //   loading: k,
-  //   error: j,
-  // } = await client.query({
-  //   query: SettingQueryDocument,
-  // });
-  // console.log({ settingData });
+  // const session = await getSession(context);
+  // if (!session?.user?.id) {
+  //   return {
+  //     redirect: {
+  //       destination: "/login",
+  //       permanent: false,
+  //     },
+  //   };
+  // }
   return {
     props: { data: null },
   };

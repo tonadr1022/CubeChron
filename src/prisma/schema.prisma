@@ -96,9 +96,9 @@ model Solve {
   userId        String?
   cubeSession   CubeSession? @relation(fields: [cubeSessionId], references: [id])
   user          User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   // @@index([cubeSessionId])
   // @@index([userId, cubeSessionId])
-
   @@index([userId])
 }
 

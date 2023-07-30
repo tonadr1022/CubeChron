@@ -1,23 +1,24 @@
-import { SettingQueryDocument } from "@/__generated__/graphql";
-import { useQuery } from "@apollo/client";
 import clsx from "clsx";
-import { useUpdateSetting } from "@/hooks/settings/useUpdateSetting";
 import { handleDropdownOptionClick } from "@/utils/handleDropdownOptionClick";
-const options = ["bottom", "right", "none"];
+import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
+import {
+  RightBarViewOptions,
+  setRightBarView,
+} from "@/redux/slices/generalSlice";
+const options = ["bottom", "right", "left"];
 const ModuleViewSelect = () => {
-  const updateSetting = useUpdateSetting();
-  const { data: setting, loading: loading } = useQuery(SettingQueryDocument);
-  if (loading) return <div>loading</div>;
-  const barView = setting?.setting.barView!;
+  // const updateSetting = useUpdateSetting();
+  // const { data: setting, loading: loading } = useQuery(SettingQueryDocument);
+  // if (loading) return <div>loading</div>;
+  // const barView = setting?.setting.barView!;
+  const dispatch = useAppDispatch();
+  const { rightBarView } = useAppSelector((state) => state.general);
   const handleSettingUpdate = (
     e: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => {
     handleDropdownOptionClick();
     const value = e.currentTarget.getAttribute("value");
-    updateSetting(setting!, {
-      barView: value!,
-      id: setting!.setting.id,
-    });
+    dispatch(setRightBarView(value as RightBarViewOptions));
   };
   return (
     <>
@@ -27,7 +28,7 @@ const ModuleViewSelect = () => {
           className="m-1 btn btn-xs bg-base-300"
           // onClick={() => setOpen((prev) => !prev)}>
         >
-          {barView}
+          {rightBarView}
         </div>
         <ul
           tabIndex={0}
@@ -37,13 +38,9 @@ const ModuleViewSelect = () => {
           )}>
           {options.map((option) => (
             <li value={option} key={option} onClick={handleSettingUpdate}>
-              <a className="hover:bg-base-300">{option}</a>
+              <button className="hover:bg-base-300">{option}</button>
             </li>
           ))}
-          {/* <li value={key} key={key} onClick={handleSettingUpdate}>
-              <a className="hover:bg-base-300">{value}</a>
-            </li>
-          ))} */}
         </ul>
       </div>
     </>

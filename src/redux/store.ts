@@ -5,6 +5,11 @@ import timerSlice from "./slices/timerSlice";
 import settingSlice from "./slices/settingSlice";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import solvesSlice from "./slices/solvesSlice";
+import cubeSessionSlice from "./slices/cubeSessionSlice";
+import userSlice from "./slices/userSlice";
+import generalSlice from "./slices/generalSlice";
+import cubeSettingSlice from "./slices/cubeSettingSlice";
 
 export const persistConfig = {
   key: "root",
@@ -15,6 +20,11 @@ const rootReducer = combineReducers({
   scramble: scrambleSlice,
   timer: timerSlice,
   setting: settingSlice,
+  solves: solvesSlice,
+  cubeSessions: cubeSessionSlice,
+  cubeSetting: cubeSettingSlice,
+  user: userSlice,
+  general: generalSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

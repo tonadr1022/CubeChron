@@ -39,28 +39,25 @@ const BottomBar = () => {
   }, [containerRef]);
 
   return (
-    <Suspense fallback={<Loading />}>
-      <div
-        className="group w-full p-2 bg-base-200 rounded-xl flex flex-col overflow-y-auto h-[30vh] relative "
-        ref={containerRef}>
-        <div className="relative h-full">
-          {modules[0] === "solves" && <SolveTableMemoized solves={solves} />}
-          {modules[0] === "cubeDisplay" && (
-            <CubeDisplay elHeight={elHeight && elHeight * 0.95} />
-          )}
-
-          {modules[0] === "timeGraph" && elHeight && (
-            <SolvesOverTime elHeight={elHeight * 0.9} solves={solves} />
-          )}
-
-          {modules[0] === "stats" && <StatsModule />}
-
-          <div className="top-0 left-0 z-50 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            <ModuleSelect moduleNumber={0} />
-          </div>
+    // <Suspense fallback={<Loading />}>
+    <div
+      className="group w-full p-2 bg-base-200 rounded-xl flex flex-col overflow-y-auto h-64 "
+      ref={containerRef}>
+      <div className="relative h-full">
+        {modules[0] === "solves" && <SolveTableMemoized solves={solves} />}
+        {modules[0] === "cubeDisplay" && (
+          <CubeDisplay elHeight={elHeight && elHeight * 0.95} />
+        )}
+        {modules[0] === "timeGraph" && elHeight && (
+          <SolvesOverTime elHeight={elHeight * 0.9} solves={solves} />
+        )}
+        {modules[0] === "stats" && <StatsModule solves={solves} />}
+        <div className="top-0 left-0 z-50 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          <ModuleSelect moduleNumber={0} />
         </div>
       </div>
-    </Suspense>
+    </div>
+    // </Suspense>
   );
 };
 export default BottomBar;

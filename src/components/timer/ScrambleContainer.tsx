@@ -38,9 +38,9 @@ const Scramble = () => {
         disabled={true}
       />
       <button
-        className="btn btn-xs btn-neutral-focus p-1 m-0 rounded-full"
+        className="btn btn-sm btn-neutral-focus p-1 m-0 rounded-full"
         onClick={() => setResetScramble(!resetScramble)}>
-        <FaArrowRotateRight className="w-4 h-4" />
+        <FaArrowRotateRight className="w-6 h-6" />
       </button>
     </>
   ) : (

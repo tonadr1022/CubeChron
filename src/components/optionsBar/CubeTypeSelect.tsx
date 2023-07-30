@@ -41,7 +41,7 @@ const CubeTypeSelect = () => {
           )}>
           {Object.entries(CUBE_TYPE_OPTIONS).map(([key, value]) => (
             <li value={key} key={key} onClick={handleSettingUpdate}>
-              <a className="hover:bg-base-300">{value}</a>
+              <button className="hover:bg-base-300">{value}</button>
             </li>
           ))}
         </ul>

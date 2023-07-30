@@ -46,7 +46,7 @@ const ModuleSelect = ({ moduleNumber }: Props) => {
             key={key}
             onClick={() => handleModuleSelect(key)}
             className="hover:bg-base-300">
-            <a>{value}</a>
+            <button>{value}</button>
           </li>
         ))}
       </ul>

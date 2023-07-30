@@ -1,5 +1,4 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-
 export interface SettingState {
   modules: string[];
   barView: string;

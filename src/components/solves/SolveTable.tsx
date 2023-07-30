@@ -30,6 +30,7 @@ import { getCubeSessionTypeSolves } from "@/data/getCubeSessionTypeSolves";
 type Props = { solves: SolveFragment[] };
 
 const SolveTable = ({ solves }: Props) => {
+  console.log("table render");
   const deleteSolve = useDeleteSolve();
   const updateSolve = useUpdateSolve();
   const onSolveDelete = useCallback(

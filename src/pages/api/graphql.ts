@@ -71,9 +71,11 @@ builder.prismaObject("Setting", {
     }),
     userId: t.exposeString("userId", { nullable: true }),
     focusMode: t.exposeBoolean("focusMode", { nullable: true }),
-    barView: t.exposeString("barView"),
+    barView: t.exposeString("barView", { nullable: true }),
     cubeType: t.exposeString("cubeType", { nullable: true }),
-    cubeDisplayDimension: t.exposeString("cubeDisplayDimension"),
+    cubeDisplayDimension: t.exposeString("cubeDisplayDimension", {
+      nullable: true,
+    }),
     cubeSessionId: t.exposeString("cubeSessionId", { nullable: true }),
     user: t.relation("user"),
   }),
