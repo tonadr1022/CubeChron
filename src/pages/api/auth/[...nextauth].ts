@@ -73,6 +73,7 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     signIn: async ({ user }) => {
@@ -113,7 +114,7 @@ export const authOptions: NextAuthOptions = {
       return true;
     },
     session: ({ session, token }) => {
-      // console.log("Session Callback", { session, token });
+      console.log("Session Callback", { session, token });
       return {
         ...session,
         user: {
@@ -134,7 +135,11 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
   },
-  debug: process.env.NODE_ENV === "development",
+  pages: {
+    signIn: "/login",
+  },
+  // debug: process.env.NODE_ENV === "development",
+  debug: true,
 };
 
 export default NextAuth(authOptions);
