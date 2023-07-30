@@ -54,9 +54,9 @@ CREATE TABLE "CubeSession" (
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3),
     "name" TEXT NOT NULL,
+    "cubeType" TEXT NOT NULL,
     "notes" TEXT,
     "userId" TEXT,
-    "cubeType" TEXT NOT NULL,
 
     CONSTRAINT "CubeSession_pkey" PRIMARY KEY ("id")
 );
@@ -84,10 +84,10 @@ CREATE TABLE "Setting" (
     "updatedAt" TIMESTAMP(3),
     "userId" TEXT,
     "focusMode" BOOLEAN NOT NULL DEFAULT false,
-    "cubeType" TEXT DEFAULT '333',
-    "cubeSessionId" TEXT,
-    "cubeDisplayDimension" TEXT DEFAULT '2D',
     "barView" TEXT DEFAULT 'bottom',
+    "cubeType" TEXT DEFAULT '333',
+    "cubeDisplayDimension" TEXT DEFAULT '2D',
+    "cubeSessionId" TEXT,
 
     CONSTRAINT "Setting_pkey" PRIMARY KEY ("id")
 );

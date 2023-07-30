@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && prisma migrate deploy && next build",
+    "heroku-postbuild": "npm run build",
     "start": "next start",
     "lint": "next lint",
     "watch": "graphql-codegen -w"

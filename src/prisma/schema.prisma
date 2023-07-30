@@ -4,15 +4,18 @@ generator client {
 
 generator pothos {
   provider    = "prisma-pothos-types"
-  prismaUtils = "true"
+  prismaUtils = true
 }
 
 datasource db {
-  provider          = "postgresql"
-  url               = env("POSTGRES_PRISMA_URL")
-  directUrl         = env("POSTGRES_URL_NON_POOLING")
-  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
+
+// datasource db {
+//   provider = "sqlite"
+//   url      = "file:./dev.db"
+// }
 
 model Account {
   id                 String    @id @default(cuid())
@@ -59,8 +62,8 @@ model User {
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   accounts      Account[]
-  cubeSessions  CubeSession[]
   sessions      Session[]
+  cubeSessions  CubeSession[]
   setting       Setting?
   solves        Solve[]
 }
@@ -70,11 +73,11 @@ model CubeSession {
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
   name      String
-  notes     String?
-  userId    String?
   cubeType  String
-  user      User?     @relation(fields: [userId], references: [id])
+  notes     String?
   solves    Solve[]
+  user      User?     @relation(fields: [userId], references: [id])
+  userId    String?
 
   @@unique([userId, name])
   @@index([userId])
@@ -94,6 +97,8 @@ model Solve {
   cubeSession   CubeSession? @relation(fields: [cubeSessionId], references: [id])
   user          User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  // @@index([cubeSessionId])
+  // @@index([userId, cubeSessionId])
   @@index([userId])
 }
 
@@ -103,10 +108,10 @@ model Setting {
   updatedAt            DateTime? @updatedAt
   userId               String?   @unique
   focusMode            Boolean   @default(false)
-  cubeType             String?   @default("333")
-  cubeSessionId        String?
-  cubeDisplayDimension String?   @default("2D")
   barView              String?   @default("bottom")
+  cubeType             String?   @default("333")
+  cubeDisplayDimension String?   @default("2D")
+  cubeSessionId        String?
   user                 User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
