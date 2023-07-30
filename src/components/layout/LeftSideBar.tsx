@@ -92,8 +92,7 @@ export const SideBarItem = ({ icon, text, href }: SideBarItemProps) => {
         href={href}
         className={clsx(
           "flex items-center  opacity-50 hover:opacity-100 transition-opacity cursor-pointer"
-        )}
-        prefetch>
+        )}>
         {icon}
         {!navCollapsed && <span className="pl-2">{text}</span>}
       </Link>

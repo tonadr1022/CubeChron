@@ -12,11 +12,7 @@ type TopNavItemProps = {
 const TopNavMenuItem = ({ icon, text, href }: TopNavItemProps) => {
   return (
     <li>
-      <Link
-        className="flex"
-        href={href}
-        onClick={handleDropdownOptionClick}
-        prefetch>
+      <Link className="flex" href={href} onClick={handleDropdownOptionClick}>
         {icon}
         <span>{text}</span>
       </Link>

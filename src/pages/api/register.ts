@@ -6,6 +6,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  console.log("register api route");
   if (req.method === "POST") {
     const body = req.body;
 

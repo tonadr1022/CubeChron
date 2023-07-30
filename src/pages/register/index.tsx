@@ -18,7 +18,7 @@ export default function Register() {
     axios
       .post("/api/register", data)
       .then(() => router.push("/login"))
-      .catch(() => toast.error("Something went wrong!"));
+      .catch((err) => console.log(err));
   };
 
   return (

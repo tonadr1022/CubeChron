@@ -61,7 +61,7 @@ const createApolloClient = () => {
     cache: new InMemoryCache({}),
   });
 };
-export const optimisticResponseVar = makeVar({});
+// export const optimisticResponseVar = makeVar({});
 
 export const initializeApollo = (
   initialState: NormalizedCacheObject | null = null
