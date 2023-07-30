@@ -3,7 +3,7 @@ import { useAppSelector } from "../reduxHooks";
 import { SettingQueryDocument } from "@/__generated__/graphql";
 import { useEffect } from "react";
 
-export const useGetSetting = () => {
+export const useGetCubeSetting = () => {
   const { isAuth } = useAppSelector((state) => state.user);
   const localSetting = useAppSelector((state) => state.cubeSetting);
   const [getSetting, { data, loading, error }] =

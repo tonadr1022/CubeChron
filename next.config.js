@@ -2,6 +2,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  env: {
+    GRAPHQL_URI: process.env.GRAPHQL_URI,
+    DATABASE_URL: process.env.DATABASE_URL,
+  },
 };
 const withPWA = require("next-pwa")({
   dest: "public",

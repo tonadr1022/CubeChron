@@ -122,7 +122,7 @@ export const authOptions: NextAuthOptions = {
         },
       };
     },
-    jwt: ({ token, user, profile }) => {
+    jwt: ({ token, user }) => {
       // console.log("JWT Callback", { token, user });
       if (user) {
         const u = user as unknown as any;
@@ -134,8 +134,7 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
   },
-  // debug: process.env.NODE_ENV === "development",
-  debug: true,
+  debug: process.env.NODE_ENV === "development",
 };
 
 export default NextAuth(authOptions);

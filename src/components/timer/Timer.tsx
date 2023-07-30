@@ -9,25 +9,20 @@ import {
   setTimerTimeoutId,
   setTimerIntervalId,
 } from "@/redux/slices/timerSlice";
-import { useLazyQuery, useQuery } from "@apollo/client";
 import DurationDisplay from "./DurationDisplay";
 
 import { nanoid } from "@reduxjs/toolkit";
-import {
-  CreateSolveInput,
-  SettingQueryDocument,
-} from "@/__generated__/graphql";
+import { CreateSolveInput } from "@/__generated__/graphql";
 import { useCreateSolve } from "@/hooks/solves/useCreateSolve";
-import { useSession } from "next-auth/react";
 import { addSolve } from "@/redux/slices/solvesSlice";
-import { useGetSetting } from "@/hooks/settings/useGetSetting";
+import { useGetCubeSetting } from "@/hooks/settings/useGetCubeSetting";
 
 const Timer = () => {
   const { isAuth } = useAppSelector((state) => state.user);
   const { timerState, timerTimeoutId, timerIntervalId } = useAppSelector(
     (state) => state.timer
   );
-  const setting = useGetSetting();
+  const setting = useGetCubeSetting();
   const cubeSessionId = setting?.cubeSessionId!;
   const cubeType = setting?.cubeType!;
 

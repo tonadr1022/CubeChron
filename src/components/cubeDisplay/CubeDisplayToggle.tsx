@@ -2,28 +2,29 @@ import {
   SettingQueryDocument,
   SettingQueryQuery,
 } from "@/__generated__/graphql";
+import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
+import { useGetCubeSetting } from "@/hooks/settings/useGetCubeSetting";
 import { useUpdateSetting } from "@/hooks/settings/useUpdateSetting";
+import { setCubeDisplayDimension } from "@/redux/slices/cubeSettingSlice";
 import { useQuery } from "@apollo/client";
 import React from "react";
 
 const options = ["2D", "3D"];
 const CubeDisplayToggle = () => {
-  const { data: settingData, loading: loading } =
-    useQuery(SettingQueryDocument);
-  const updateSetting = useUpdateSetting();
-  if (loading) return <div>loading</div>;
+  // const { data: settingData, loading: loading } =
+  //   useQuery(SettingQueryDocument);
+  const dispatch = useAppDispatch();
 
-  const { cubeDisplayDimension } = settingData!.setting;
-
+  // const updateSetting = useUpdateSetting();
+  // if (loading) return <div>loading</div>;
+  const { cubeDisplayDimension } = useAppSelector((state) => state.cubeSetting);
+  // const { cubeDisplayDimension } = settingData!.setting;
   const handleUpdateSetting = (e: {
     currentTarget: { getAttribute: (arg0: string) => any };
   }) => {
     const value = e.currentTarget.getAttribute("value");
-    console.log(value);
-    updateSetting(settingData!, {
-      cubeDisplayDimension: value!,
-      id: settingData!.setting.id,
-    });
+    // console.log(value);
+    dispatch(setCubeDisplayDimension(value));
   };
   return (
     <div className="join text-center my-1">

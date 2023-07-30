@@ -11,7 +11,8 @@ const CubeTypeSelect = () => {
   const updateSetting = useUpdateSetting();
   const { data: setting, loading: loading } = useQuery(SettingQueryDocument);
   if (loading) return <Loading />;
-  const cubeType = setting?.setting.cubeType!;
+  // const cubeType = setting?.setting.cubeType!;
+  const cubeType = "333";
   const handleSettingUpdate = (
     e: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => {
