@@ -11,7 +11,7 @@ import {
   UpdateSolveMutation,
   SolveDocument,
 } from "@/__generated__/graphql";
-import { SOLVE_FRAGMENT } from "@/graphql/mutations";
+import { SOLVE_FRAGMENT } from "@/graphql/fragments";
 import { gql, useMutation } from "@apollo/client";
 
 // Define the return type for the mutation data

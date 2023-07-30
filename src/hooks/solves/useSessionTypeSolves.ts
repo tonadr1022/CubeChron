@@ -12,7 +12,7 @@ import { useEffect } from "react";
 export const useSessionTypeSolves = () => {
   const { isAuth } = useAppSelector((state) => state.user);
   const localSolves = selectAllSolves(store.getState());
-  const localSetting = useAppSelector((state) => state.setting);
+  const localSetting = useAppSelector((state) => state.cubeSetting);
   const [getSolves, { data, loading, error }] =
     useLazyQuery(SolvesQueryDocument);
   const [getSetting, { data: setting, loading: loading2 }] =
