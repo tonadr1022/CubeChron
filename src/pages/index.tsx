@@ -41,6 +41,8 @@ type Props = {
   settingData: SettingQueryQuery;
 };
 const Home = () => {
+  new Scrambow().get(1)[0].scramble_string;
+
   const dispatch = useAppDispatch();
   const { focusMode } = useAppSelector((state) => state.general);
   const theme = useAppSelector((state) => state.setting.theme);
