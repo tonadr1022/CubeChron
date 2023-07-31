@@ -57,14 +57,16 @@ const Home = () => {
   } else {
     dispatch(setIsAuth(false));
     return (
-      <div className="p-4 prose flex flex-col w-64 text-center items-center gap-4">
-        <h2>Please Login or Register</h2>
-        <Link href={"/login"} className="btn btn-sm">
-          Login
-        </Link>
-        <Link href={"/register"} className="btn btn-sm">
-          Register
-        </Link>
+      <div className="flex justify-center">
+        <div className="p-4 prose flex flex-col w-64 text-center items-center gap-4">
+          <h2>Please Login or Register</h2>
+          <Link href={"/login"} className="btn btn-sm">
+            Login
+          </Link>
+          <Link href={"/register"} className="btn btn-sm">
+            Register
+          </Link>
+        </div>
       </div>
     );
   }
