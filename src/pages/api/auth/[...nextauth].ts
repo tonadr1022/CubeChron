@@ -77,7 +77,7 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     signIn: async ({ user }) => {
-      console.log("On Sign in Callback");
+      // console.log("On Sign in Callback");
       const cubeSession = await prisma.cubeSession.findFirst({
         where: {
           userId: user.id,
@@ -114,7 +114,7 @@ export const authOptions: NextAuthOptions = {
       return true;
     },
     session: ({ session, token }) => {
-      console.log("Session Callback", { session, token });
+      // console.log("Session Callback", { session, token });
       return {
         ...session,
         user: {
@@ -138,8 +138,8 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/login",
   },
-  // debug: process.env.NODE_ENV === "development",
-  debug: true,
+  debug: process.env.NODE_ENV === "development",
+  // debug: true,
 };
 
 export default NextAuth(authOptions);

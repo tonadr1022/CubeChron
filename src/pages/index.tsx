@@ -1,38 +1,15 @@
-import Image from "next/image";
-import { Inter } from "next/font/google";
-// import { useEffect } from "react";
-// import { getSession, useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import { Session, getServerSession } from "next-auth";
-import gql from "graphql-tag";
-import { initializeApollo } from "@/lib/apollo-client";
-import { CubeSession, User } from "@prisma/client";
-import { authOptions } from "./api/auth/[...nextauth]";
-import { getSession, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { GetServerSidePropsContext } from "next";
-import { useQuery } from "@apollo/client";
-import { graphql } from "@/__generated__";
-import {
-  CubeSessionsDocument,
-  SettingQueryDocument,
-  SettingQueryQuery,
-  SolvesQueryDocument,
-} from "@/__generated__/graphql";
+import { SettingQueryQuery } from "@/__generated__/graphql";
 import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
 import RightSideBar from "@/components/layout/RightSideBar";
 import { Scrambow } from "scrambow";
 import TimerScrambleContainer from "@/components/timer/TimerScrambleContainer";
-import dynamic from "next/dynamic";
 import OptionsBar from "@/components/optionsBar/OptionsBar";
-import CubeDisplay from "@/components/cubeDisplay/CubeDisplay";
 import Loading from "@/components/common/Loading";
-import SolveTable from "@/components/solves/SolveTable";
 import BottomBar from "@/components/layout/BottomBar";
-import { purgeStoredState } from "redux-persist";
-import { persistConfig } from "@/redux/store";
 import Head from "next/head";
-import ThemeSwitch from "@/components/ThemeSwitch";
 import { setIsAuth } from "@/redux/slices/userSlice";
 import Link from "next/link";
 // import { UserQuery } from "@/__generated__/graphql";
@@ -59,7 +36,7 @@ const Home = () => {
     return (
       <div className="flex justify-center">
         <div className="p-4 prose flex flex-col w-64 text-center items-center gap-4">
-          <h2>Please Login or Register</h2>
+          <h2>Please Login or Register to sync solves across devices</h2>
           <Link href={"/login"} className="btn btn-sm">
             Login
           </Link>
@@ -75,14 +52,11 @@ const Home = () => {
       <Head>
         <title>CubeChron</title>
       </Head>
-      {/* {status === "authenticated" ? ( */}
       <>
         <div className="flex h-full flex-col md:flex-row-reverse bg-base text-base">
           {!focusMode && <RightSideBar />}
           <div className="flex flex-col flex-1">
-            {/* Main content header */}
             <OptionsBar />
-            {/* Main content body (timer) */}
             <TimerScrambleContainer />
             {!focusMode && (
               <div className="md:hidden">

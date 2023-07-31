@@ -3,8 +3,10 @@ import LeftSideBar from "./LeftSideBar";
 import TopNavBar from "./TopNavBar";
 import { Suspense } from "react";
 import Loading from "../common/Loading";
+import { useSession } from "next-auth/react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  const { status } = useSession();
   const { focusMode } = useAppSelector((state) => state.general);
   return (
     <>
@@ -19,7 +21,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <LeftSideBar />
       </div> */}
       <div className="flex">
-        {!focusMode && (
+        {!focusMode && status === "authenticated" && (
           <div className="hidden sm:flex">
             <LeftSideBar />
           </div>

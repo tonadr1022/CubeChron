@@ -20,3 +20,12 @@ scramble-display {
   overflow: hidden;
   @apply bg-base-100;
 }
+
+/* html {
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
+} */
+
+body {
+  overflow: hidden;
+}

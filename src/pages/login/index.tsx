@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import ThemeSwitch from "@/components/ThemeSwitch";
+import Link from "next/link";
 
 export default function Login() {
   const session = useSession();
@@ -37,20 +38,20 @@ export default function Login() {
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <Image
-            className="mx-auto h-10 w-auto"
+            className="mx-auto h-16  w-auto"
             src="/pwa-512x512.png"
             alt="CubeChron Logo"
-            width={300}
-            height={300}
+            width={30}
+            height={30}
           />
-          <h2 className="mt-10 text-center font-bold leading-9 tracking-tight  text-2xl">
-            Sign in to CubeChron
+          <h2 className="mt-2 text-center font-bold leading-9 tracking-tight  text-2xl">
+            Sign In
           </h2>
         </div>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm flex flex-col text-center">
-          <form className="form-control space-y-6" onSubmit={loginUser}>
+          <form className="form-control space-y-4" onSubmit={loginUser}>
             <div>
-              <label htmlFor="email" className="label text-sm text-start">
+              <label htmlFor="email" className="label text-sm text-start pb-0">
                 Email address
               </label>
               <div className="mt-1">
@@ -69,7 +70,9 @@ export default function Login() {
             </div>
 
             <div>
-              <label htmlFor="password" className="label text-sm text-start">
+              <label
+                htmlFor="password"
+                className="label text-sm text-start pb-0">
                 Password
               </label>
               <div className="mt-1">
@@ -92,6 +95,12 @@ export default function Login() {
               <button type="submit" className="btn btn-primary px-6">
                 Sign in
               </button>
+            </div>
+            <div>
+              No account?{" "}
+              <Link className="link m-0" href={"/register"}>
+                Register
+              </Link>
             </div>
           </form>
         </div>

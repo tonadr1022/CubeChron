@@ -127,19 +127,27 @@ builder.queryType({
   fields: (t) => ({
     solves: t.prismaField({
       type: ["Solve"],
-      resolve: (query, _parent, _args, ctx) =>
-        prisma.solve.findMany({
+      resolve: async (query, _parent, _args, ctx) => {
+        console.log("ctx", ctx.id);
+        const solves = await prisma.solve.findMany({
           ...query,
-          where: { userId: ctx?.id },
-        }),
+          where: { userId: ctx.id },
+        });
+        console.log("solves69", solves);
+        return solves;
+      },
     }),
     cubeSessions: t.prismaField({
       type: ["CubeSession"],
-      resolve: (query, _parent, _args, ctx) =>
-        prisma.cubeSession.findMany({
+      resolve: async (query, _parent, _args, ctx) => {
+        const cubeSessions = await prisma.cubeSession.findMany({
           ...query,
           where: { userId: ctx?.id },
-        }),
+        });
+        console.log(ctx.id);
+        console.log(cubeSessions);
+        return cubeSessions;
+      },
     }),
     setting: t.prismaField({
       type: "Setting",
