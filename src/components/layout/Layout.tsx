@@ -30,7 +30,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <TopNavBar />
             </div>
           )}
-          <div className="h-full">
+          <div className="h-full flex justify-center">
             <Suspense fallback={<Loading />}>{children}</Suspense>
           </div>
         </div>

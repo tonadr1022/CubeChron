@@ -1,13 +1,19 @@
 import ThemeSwitch from "@/components/ThemeSwitch";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import React, { useState } from "react";
 
 const SettingsPage = () => {
+  const { data: session } = useSession();
+
   return (
-    <div>
-      <span>SettingsPage</span>
+    <div className="flex flex-col">
+      <h1>SettingsPage</h1>
       <ThemeSwitch />
-      <button onClick={() => signOut()}>Logout</button>
+      <button className="btn" onClick={() => signOut()}>
+        Logout
+      </button>
+      <div>{session?.user?.name}</div>
+      <div>{session?.user?.email}</div>
     </div>
   );
 };

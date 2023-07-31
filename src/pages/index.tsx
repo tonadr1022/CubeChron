@@ -34,6 +34,7 @@ import { persistConfig } from "@/redux/store";
 import Head from "next/head";
 import ThemeSwitch from "@/components/ThemeSwitch";
 import { setIsAuth } from "@/redux/slices/userSlice";
+import Link from "next/link";
 // import { UserQuery } from "@/__generated__/graphql";
 
 // const inter = Inter({ subsets: ["latin"] });
@@ -55,6 +56,17 @@ const Home = () => {
     dispatch(setIsAuth(true));
   } else {
     dispatch(setIsAuth(false));
+    return (
+      <div className="p-4 prose flex flex-col w-64 text-center items-center gap-4">
+        <h2>Please Login or Register</h2>
+        <Link href={"/login"} className="btn btn-sm">
+          Login
+        </Link>
+        <Link href={"/register"} className="btn btn-sm">
+          Register
+        </Link>
+      </div>
+    );
   }
   return (
     <>

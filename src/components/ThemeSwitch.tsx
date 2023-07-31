@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
 import { setTheme } from "@/redux/slices/settingSlice";
 import { useEffect } from "react";
+import { FaRegMoon, FaRegSun } from "react-icons/fa6";
 
 const ThemeSwitch = () => {
   const theme = useAppSelector((state) => state.setting.theme);
@@ -14,11 +15,9 @@ const ThemeSwitch = () => {
     document.querySelector("html")!.setAttribute("data-theme", theme);
   }, [theme]);
   return (
-    <label className="swap swap-rotate">
-      <input onClick={toggleTheme} type="checkbox" />
-      <div className="swap-on">DARKMODE</div>
-      <div className="swap-off">LIGHTMODE</div>
-    </label>
+    <button className="btn btn-sm" onClick={toggleTheme}>
+      {theme === "light" ? <FaRegMoon /> : <FaRegSun />}
+    </button>
   );
 };
 

@@ -23,7 +23,6 @@ export default function Register() {
 
   return (
     <>
-      <ThemeSwitch />
       <div className="flex min-h-full flex-1 flex-col items-center justify-center px-6 py-12 lg:px-8">
         <div className="prose max-w-sm">
           <Image
