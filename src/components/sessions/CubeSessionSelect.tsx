@@ -10,9 +10,13 @@ import { useOnClickOutside } from "usehooks-ts";
 import Modal from "../common/Modal";
 import CreateCubeSessionForm from "./CreateCubeSessionForm";
 import { handleDropdownOptionClick } from "@/utils/handleDropdownOptionClick";
+import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
+import { setTimerCanStart } from "@/redux/slices/timerSlice";
 
 const CubeSessionSelect = () => {
   const [open, setOpen] = useState(false);
+  const dispatch = useAppDispatch();
+  const { timerCanStart } = useAppSelector((state) => state.timer);
   const { data, loading } = useQuery(CubeSessionsDocument);
   const { data: setting, loading: loading2 } = useQuery(SettingQueryDocument);
   const updateSetting = useUpdateSetting();
@@ -21,6 +25,7 @@ const CubeSessionSelect = () => {
   const { cubeSessionId } = setting?.setting!;
   const handleClick = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
     if (e.currentTarget.getAttribute("value") === "add") {
+      dispatch(setTimerCanStart(false));
       setOpen(true);
     }
     handleDropdownOptionClick();
@@ -34,6 +39,11 @@ const CubeSessionSelect = () => {
       cubeSessionId: value!,
       id: setting!.setting.id,
     });
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    dispatch(setTimerCanStart(true));
   };
   const active = cubeSessions.find((session) => session.id === cubeSessionId);
   return (
@@ -65,7 +75,7 @@ const CubeSessionSelect = () => {
           </li>
         </ul>
       </div>{" "}
-      <Modal open={open} onClose={() => setOpen(false)}>
+      <Modal open={open} onClose={handleClose}>
         <CreateCubeSessionForm />
       </Modal>
     </>

@@ -50,5 +50,5 @@ export const getScramble = ({ cubeType }: IGetScramble): string => {
     default:
       return "No Scramble";
   }
-  return scramble;
+  return scramble.replace(/\s+/g, " ");
 };

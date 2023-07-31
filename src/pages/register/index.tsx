@@ -3,7 +3,6 @@ import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import ThemeSwitch from "@/components/ThemeSwitch";
 import Link from "next/link";
 
 export default function Register() {

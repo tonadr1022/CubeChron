@@ -8,7 +8,7 @@ import { FaArrowRotateRight } from "react-icons/fa6";
 import TextareaAutosize from "react-textarea-autosize";
 import { SettingQueryDocument } from "@/__generated__/graphql";
 
-const Scramble = () => {
+const ScrambleContainer = React.memo(() => {
   const { data: setting, loading } = useQuery(SettingQueryDocument);
   const cubeType = setting?.setting.cubeType;
   const [resetScramble, setResetScramble] = React.useState(false);
@@ -28,11 +28,11 @@ const Scramble = () => {
   }, [dispatch, cubeType, resetScramble]);
 
   if (loading) return <Loading />;
-
+  console.log("scramble container render");
   return scramble ? (
     <>
       <TextareaAutosize
-        className={"scramble-text text-xl"}
+        className={"prevent-select scramble-text text-xl"}
         value={scramble}
         minRows={1}
         disabled={true}
@@ -46,6 +46,8 @@ const Scramble = () => {
   ) : (
     <Loading />
   );
-};
+});
 
-export default Scramble;
+export default ScrambleContainer;
+
+ScrambleContainer.displayName = "ScrambleContainer";

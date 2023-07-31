@@ -6,6 +6,7 @@ interface TimerState {
   timerState: TimeState;
   timerTimeoutId: number | null;
   timerIntervalId: number | null;
+  timerCanStart: boolean;
 }
 
 const initialState: TimerState = {
@@ -14,6 +15,7 @@ const initialState: TimerState = {
   timerTimeoutId: null,
   timerIntervalId: null,
   timerState: "initial",
+  timerCanStart: true,
 };
 
 export const timerSlice = createSlice({
@@ -32,6 +34,9 @@ export const timerSlice = createSlice({
     setTimerIntervalId: (state, action: PayloadAction<number | null>) => {
       state.timerIntervalId = action.payload;
     },
+    setTimerCanStart: (state, action: PayloadAction<boolean>) => {
+      state.timerCanStart = action.payload;
+    },
   },
 });
 export const {
@@ -39,6 +44,7 @@ export const {
   setTimerTimeoutId,
   setTimerTimestamp,
   setTimerIntervalId,
+  setTimerCanStart,
 } = timerSlice.actions;
 
 export default timerSlice.reducer;

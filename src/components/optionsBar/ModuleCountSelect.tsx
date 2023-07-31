@@ -1,6 +1,8 @@
 import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
 import { setModuleCount } from "@/redux/slices/settingSlice";
+import { handleDropdownOptionClick } from "@/utils/handleDropdownOptionClick";
 import React from "react";
+import { FaChevronDown } from "react-icons/fa6";
 
 const ModuleCountSelect = () => {
   const { moduleCount } = useAppSelector((state) => state.setting);
@@ -8,6 +10,7 @@ const ModuleCountSelect = () => {
   const handleSettingUpdate = (
     e: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => {
+    handleDropdownOptionClick();
     const value = e.currentTarget.getAttribute("value");
     dispatch(setModuleCount(Number(value)));
   };
@@ -20,7 +23,7 @@ const ModuleCountSelect = () => {
           className="m-1 btn btn-xs bg-base-300"
           // onClick={() => setOpen((prev) => !prev)}>
         >
-          {moduleCount}
+          {moduleCount} <FaChevronDown />
         </div>
         <ul
           tabIndex={0}

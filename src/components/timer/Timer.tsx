@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useSpaceBarDown } from "@/hooks/useSpaceBarDown";
 import { useSpaceBarUp } from "@/hooks/useSpaceBarUp";
 import { getScramble } from "@/utils/getScramble";
@@ -16,12 +16,11 @@ import { CreateSolveInput } from "@/__generated__/graphql";
 import { useCreateSolve } from "@/hooks/solves/useCreateSolve";
 import { addSolve } from "@/redux/slices/solvesSlice";
 import { useGetCubeSetting } from "@/hooks/settings/useGetCubeSetting";
-
+import ScrambleContainer from "./ScrambleContainer";
 const Timer = () => {
   const { isAuth } = useAppSelector((state) => state.user);
-  const { timerState, timerTimeoutId, timerIntervalId } = useAppSelector(
-    (state) => state.timer
-  );
+  const { timerState, timerTimeoutId, timerIntervalId, timerCanStart } =
+    useAppSelector((state) => state.timer);
   const setting = useGetCubeSetting();
   const cubeSessionId = setting?.cubeSessionId!;
   const cubeType = setting?.cubeType!;
@@ -60,7 +59,10 @@ const Timer = () => {
 
       dispatch(setTimerState("stalling"));
       dispatch(setCurrentScramble(getScramble({ cubeType })));
-    } else if (timerState === "initial" || timerState === "paused") {
+    } else if (
+      (timerCanStart && timerState === "initial") ||
+      timerState === "paused"
+    ) {
       // timer at 0, ready to turn red before starting
       setDuration(0);
       dispatch(setTimerState("stalling"));
@@ -92,10 +94,21 @@ const Timer = () => {
 
   useSpaceBarUp(handleKeyUp);
 
+  const handleTouchStart = () => {
+    handleKeyDown();
+  };
+  const handleTouchEnd = () => {
+    handleKeyUp();
+  };
   return (
     <>
-      {/* <div>{cubeType}</div> */}
-      <DurationDisplay duration={duration} />
+      <div
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        className=" flex flex-col justify-center items-center text-center flex-1">
+        <ScrambleContainer />
+        <DurationDisplay duration={duration} />
+      </div>
     </>
   );
 };

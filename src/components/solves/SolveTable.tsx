@@ -19,18 +19,9 @@ import { useDeleteSolve } from "@/hooks/solves/useDeleteSolve";
 import { useUpdateSolve } from "@/hooks/solves/useCreateSolve";
 import { getCubeSessionTypeSolves } from "@/data/getCubeSessionTypeSolves";
 
-// gql`
-//   fragment SolveTable_Solve on Solve {
-//     id
-//     duration
-//     dnf
-//     plusTwo
-//   }
-// `;
 type Props = { solves: SolveFragment[] };
 
 const SolveTable = ({ solves }: Props) => {
-  console.log("table render");
   const deleteSolve = useDeleteSolve();
   const updateSolve = useUpdateSolve();
   const onSolveDelete = useCallback(

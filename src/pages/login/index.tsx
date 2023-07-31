@@ -4,7 +4,6 @@ import { signIn, useSession } from "next-auth/react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import ThemeSwitch from "@/components/ThemeSwitch";
 import Link from "next/link";
 
 export default function Login() {

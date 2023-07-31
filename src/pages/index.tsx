@@ -1,32 +1,23 @@
 import { useSession } from "next-auth/react";
-import { useEffect } from "react";
 import { GetServerSidePropsContext } from "next";
-import { SettingQueryQuery } from "@/__generated__/graphql";
 import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
 import RightSideBar from "@/components/layout/RightSideBar";
 import { Scrambow } from "scrambow";
-import TimerScrambleContainer from "@/components/timer/TimerScrambleContainer";
 import OptionsBar from "@/components/optionsBar/OptionsBar";
 import Loading from "@/components/common/Loading";
 import BottomBar from "@/components/layout/BottomBar";
 import Head from "next/head";
 import { setIsAuth } from "@/redux/slices/userSlice";
 import Link from "next/link";
-// import { UserQuery } from "@/__generated__/graphql";
+import Timer from "@/components/timer/Timer";
+import { useTheme } from "@/hooks/useTheme";
 
-// const inter = Inter({ subsets: ["latin"] });
-type Props = {
-  settingData: SettingQueryQuery;
-};
 const Home = () => {
   new Scrambow().get(1)[0].scramble_string;
 
   const dispatch = useAppDispatch();
   const { focusMode } = useAppSelector((state) => state.general);
-  const theme = useAppSelector((state) => state.setting.theme);
-  useEffect(() => {
-    document.querySelector("html")!.setAttribute("data-theme", theme);
-  }, [theme]);
+  useTheme();
   const { status } = useSession();
   if (status === "loading") return <Loading />;
   if (status === "authenticated") {
@@ -57,7 +48,7 @@ const Home = () => {
           {!focusMode && <RightSideBar />}
           <div className="flex flex-col flex-1">
             <OptionsBar />
-            <TimerScrambleContainer />
+            <Timer />
             {!focusMode && (
               <div className="md:hidden">
                 <BottomBar />
