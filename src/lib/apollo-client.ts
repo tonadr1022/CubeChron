@@ -51,9 +51,10 @@ let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
 const httpLink = new HttpLink({
   uri: process.env.GRAPHQL_URI,
+  credentials: "include",
 });
 const authLink = setContext((_, { headers }) => {
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("userid");
   return {
     headers: {
       ...headers,
