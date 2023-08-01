@@ -345,11 +345,13 @@ writeFileSync(resolve(__dirname, "../schema.graphql"), printSchema(schema));
 
 export default createYoga<{ req: NextApiRequest; res: NextApiRequestCookies }>({
   context: async (ctx) => {
+    console.log('context cookies', ctx.req.cookies)
     const sessionToken = ctx.req.cookies["next-auth.session-token"];
     const decoded = await decode({
       token: sessionToken,
       secret: process.env.NEXTAUTH_SECRET!,
     });
+    console.log('decoded cookie', decoded)
     return { id: decoded?.id };
   },
   schema,
