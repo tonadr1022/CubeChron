@@ -49,24 +49,26 @@ export const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
-const httpLink = new HttpLink({
-  uri: process.env.GRAPHQL_URI,
-  credentials: "include",
-});
-const authLink = setContext((_, { headers }) => {
-  const userId = localStorage.getItem("userid");
-  return {
-    headers: {
-      ...headers,
-      userId: userId ? userId : "nope",
-    },
-  };
-});
+// const httpLink = new HttpLink({
+//   uri: process.env.GRAPHQL_URI,
+//   credentials: "include",
+// });
+// const authLink = setContext((_, { headers }) => {
+//   const userId = localStorage.getItem("userid");
+//   return {
+//     headers: {
+//       ...headers,
+//       userId: userId ? userId : "nope",
+//     },
+//   };
+// });
 
 const createApolloClient = () => {
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
-    link: authLink.concat(httpLink),
+    link: new HttpLink({
+      uri: process.env.GRAPHQL_URI,
+    }),
     cache: new InMemoryCache({}),
   });
 };
