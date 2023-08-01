@@ -41,7 +41,6 @@ const CubeSessionsMenu = () => {
   const { data: setting } = useQuery(SettingQueryDocument);
   const cubeSessionId = setting?.setting.cubeSessionId;
   const cubeSessions = sessions?.cubeSessions;
-  console.log(cubeSessions);
   return (
     <div className="flex flex-col gap-3">
       {cubeSessions?.map((session) => {

@@ -40,24 +40,32 @@ import {
   HttpLink,
   InMemoryCache,
   NormalizedCacheObject,
-  makeVar,
 } from "@apollo/client";
-import { relayStylePagination } from "@apollo/client/utilities";
 import merge from "deepmerge";
 import isEqual from "lodash/isEqual";
+import { setContext } from "@apollo/client/link/context";
 
 export const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
+const httpLink = new HttpLink({
+  uri: process.env.GRAPHQL_URI,
+});
+const authLink = setContext((_, { headers }) => {
+  const userId = localStorage.getItem("userId");
+  return {
+    headers: {
+      ...headers,
+      userId: userId ? userId : "nope",
+    },
+  };
+});
+
 const createApolloClient = () => {
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
-    link: new HttpLink({
-      // uri: "http://localhost:3000/api/graphql", // Server URL (must be absolute)
-      uri: process.env.GRAPHQL_URI,
-      // credentials: "same-origin", // Additional fetch() options like `credentials` or `headers`
-    }),
+    link: authLink.concat(httpLink),
     cache: new InMemoryCache({}),
   });
 };

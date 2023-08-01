@@ -18,9 +18,6 @@ const SolveTableRow = ({
   onDelete,
   solveCount,
 }: Props) => {
-  if (solveCount === 77) {
-    console.log(solveCount, solve.duration, solve.dnf, solve.plusTwo);
-  }
   //   const record = useAppSelector((state) => selectRecordById(state, recordId));
   return (
     solve && (

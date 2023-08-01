@@ -10,7 +10,6 @@ export const useCreateCubeSession = () => {
     CreateCubeSessionDocument,
     {
       update(cache, { data }) {
-        console.log("data2", data);
         cache.modify({
           fields: {
             cubeSessions(existingSessions = []) {

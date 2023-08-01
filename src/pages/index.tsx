@@ -1,4 +1,4 @@
-import { useSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import { GetServerSidePropsContext } from "next";
 import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
 import RightSideBar from "@/components/layout/RightSideBar";
@@ -11,6 +11,7 @@ import { setIsAuth } from "@/redux/slices/userSlice";
 import Link from "next/link";
 import Timer from "@/components/timer/Timer";
 import { useTheme } from "@/hooks/useTheme";
+import { serialize } from "cookie";
 
 const Home = () => {
   new Scrambow().get(1)[0].scramble_string;
@@ -18,9 +19,10 @@ const Home = () => {
   const dispatch = useAppDispatch();
   const { focusMode } = useAppSelector((state) => state.general);
   useTheme();
-  const { status } = useSession();
+  const { status, data } = useSession();
   if (status === "loading") return <Loading />;
   if (status === "authenticated") {
+    localStorage.setItem("userid", data?.user?.id!);
     dispatch(setIsAuth(true));
   } else {
     dispatch(setIsAuth(false));
@@ -72,22 +74,25 @@ const Home = () => {
   );
 };
 
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
-  // const client = initializeApollo();
-  new Scrambow().get(1)[0].scramble_string;
-  // const session = await getSession(context);
-  // if (!session?.user?.id) {
-  //   return {
-  //     redirect: {
-  //       destination: "/login",
-  //       permanent: false,
-  //     },
-  //   };
-  // }
-  return {
-    props: { data: null },
-  };
-};
+// export const getServerSideProps = async (
+//   context: GetServerSidePropsContext
+// ) => {
+//   // const client = initializeApollo();
+//   new Scrambow().get(1)[0].scramble_string;
+//   const session = await getSession(context);
+//   // const cookie = serialize("next-user-id", session?.user?.id!, {});
+//   // context.res.setHeader("Set-Cookie", cookie);
+//   context.res.setHeader("nextauth-user-id", session?.user?.id!);
+//   // if (!session?.user?.id) {
+//   //   return {
+//   //     redirect: {
+//   //       destination: "/login",
+//   //       permanent: false,
+//   //     },
+//   //   };
+//   // }
+//   return {
+//     props: { data: null },
+//   };
+// };
 export default Home;

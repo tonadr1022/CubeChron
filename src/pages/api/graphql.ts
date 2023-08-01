@@ -128,13 +128,10 @@ builder.queryType({
     solves: t.prismaField({
       type: ["Solve"],
       resolve: async (query, _parent, _args, ctx) => {
-        console.log("ctx", ctx);
-        console.log('ctxid', ctx.id)
         const solves = await prisma.solve.findMany({
           ...query,
           where: { userId: ctx.id },
         });
-        console.log("solves69", solves);
         return solves;
       },
     }),
@@ -145,8 +142,6 @@ builder.queryType({
           ...query,
           where: { userId: ctx?.id },
         });
-        console.log(ctx.id);
-        console.log(cubeSessions);
         return cubeSessions;
       },
     }),
@@ -345,28 +340,29 @@ writeFileSync(resolve(__dirname, "../schema.graphql"), printSchema(schema));
 
 export default createYoga<{ req: NextApiRequest; res: NextApiRequestCookies }>({
   context: async (ctx) => {
-    console.log('context cookies', ctx.req.cookies)
+    console.log("ctx", ctx);
+    console.log("context userid header", ctx.req.headers["userid"]);
     const sessionToken = ctx.req.cookies["next-auth.session-token"];
     const sessionToken2 = ctx.req.cookies["__Secure-next-auth.session-token"];
-   let decoded;
+    let decoded;
     if (sessionToken2) {
       decoded = await decode({
-      token: sessionToken2,
-      secret: process.env.NEXTAUTH_SECRET!,
-    });
+        token: sessionToken2,
+        secret: process.env.NEXTAUTH_SECRET!,
+      });
     } else {
       decoded = await decode({
-      token: sessionToken,
-      secret: process.env.NEXTAUTH_SECRET!,
-    });
+        token: sessionToken,
+        secret: process.env.NEXTAUTH_SECRET!,
+      });
     }
 
-    console.log('context', ctx);
-    console.log('context request cookies', ctx.req.cookies)
-    console.log('header cookie', ctx.req.headers.cookie)
-    console.log('weird',ctx.req.cookies["__Secure-next-auth.session-token"] )
-    console.log('decoded cookie', decoded)
-    return { id: decoded?.id };
+    // console.log('context', ctx);
+    // console.log('context request cookies', ctx.req.cookies)
+    // console.log('header cookie', ctx.req.headers.cookie)
+    // console.log('weird',ctx.req.cookies["__Secure-next-auth.session-token"] )
+    // console.log('decoded cookie', decoded)
+    return { id: ctx.req.headers["userid"] };
   },
   schema,
   graphqlEndpoint: "/api/graphql",

@@ -53,7 +53,6 @@ export const useUpdateSetting = () => {
           ...setting,
           ...input,
         } as Setting;
-        console.log({ updatedSetting });
         return {
           __typename: "Mutation",
           updateSetting: {
