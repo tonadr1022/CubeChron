@@ -13,10 +13,14 @@ const nextConfig = {
         source: "/api/:path*",
         // source: "/api/:path*",
         headers: [
-          { key: "Access-Control-Allow-Credentials", value: "true" },
+          // { key: "Access-Control-Allow-Credentials", value: "true" },
+          // {
+          //   key: "Access-Control-Allow-Origin",
+          //   value: "https://www.cubechron.com",
+          // },
           {
             key: "Access-Control-Allow-Origin",
-            value: "https://www.cubechron.com",
+            value: "*",
           },
           {
             key: "Access-Control-Allow-Methods",
