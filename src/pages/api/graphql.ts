@@ -128,7 +128,8 @@ builder.queryType({
     solves: t.prismaField({
       type: ["Solve"],
       resolve: async (query, _parent, _args, ctx) => {
-        console.log("ctx", ctx.id);
+        console.log("ctx", ctx);
+        console.log('ctxid', ctx.id)
         const solves = await prisma.solve.findMany({
           ...query,
           where: { userId: ctx.id },
