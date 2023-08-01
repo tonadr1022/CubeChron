@@ -343,26 +343,16 @@ export default createYoga<{ req: NextApiRequest }>({
     console.log("ctx", ctx);
     console.log("context userid header", ctx.req.headers["userid"]);
     const sessionToken = ctx.req.cookies["next-auth.session-token"];
-    const sessionToken2 = ctx.req.cookies["__Secure-next-auth.session-token"];
-    let decoded;
-    if (sessionToken2) {
-      decoded = await decode({
-        token: sessionToken2,
-        secret: process.env.NEXTAUTH_SECRET!,
-      });
-    } else {
-      decoded = await decode({
-        token: sessionToken,
-        secret: process.env.NEXTAUTH_SECRET!,
-      });
-    }
-
-    // console.log('context', ctx);
-    // console.log('context request cookies', ctx.req.cookies)
-    // console.log('header cookie', ctx.req.headers.cookie)
-    // console.log('weird',ctx.req.cookies["__Secure-next-auth.session-token"] )
-    // console.log('decoded cookie', decoded)
-    return { id: ctx.req.headers["userid"] };
+    const decoded = await decode({
+      token: sessionToken,
+      secret: process.env.NEXTAUTH_SECRET!,
+    });
+    console.log("context", ctx);
+    console.log("context request cookies", ctx.req.cookies);
+    console.log("header cookie", ctx.req.headers.cookie);
+    console.log("weird", ctx.req.cookies["__Secure-next-auth.session-token"]);
+    console.log("decoded cookie", decoded);
+    return { id: decoded?.id };
   },
   schema,
   graphqlEndpoint: "/api/graphql",
