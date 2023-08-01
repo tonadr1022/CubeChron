@@ -338,7 +338,7 @@ builder.mutationType({
 const schema = builder.toSchema();
 writeFileSync(resolve(__dirname, "../schema.graphql"), printSchema(schema));
 
-export default createYoga<{ req: NextApiRequest; res: NextApiRequestCookies }>({
+export default createYoga<{ req: NextApiRequest }>({
   context: async (ctx) => {
     console.log("ctx", ctx);
     console.log("context userid header", ctx.req.headers["userid"]);
