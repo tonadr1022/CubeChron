@@ -351,6 +351,8 @@ export default createYoga<{ req: NextApiRequest; res: NextApiRequestCookies }>({
       token: sessionToken,
       secret: process.env.NEXTAUTH_SECRET!,
     });
+    console.log('context', ctx);
+    console.log('context request', ctx.req)
     console.log('decoded cookie', decoded)
     return { id: decoded?.id };
   },
