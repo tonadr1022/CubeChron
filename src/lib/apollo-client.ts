@@ -67,7 +67,7 @@ const createApolloClient = () => {
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
     link: new HttpLink({
-      uri: process.env.GRAPHQL_URI,
+      uri: "https://cubechron-9b393b862959.herokuapp.com/api/graphql",
     }),
     cache: new InMemoryCache({}),
   });
