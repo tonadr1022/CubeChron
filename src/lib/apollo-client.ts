@@ -49,25 +49,25 @@ export const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
 
 let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
-// const httpLink = new HttpLink({
-//   uri: process.env.GRAPHQL_URI,
-//   credentials: "include",
-// });
-// const authLink = setContext((_, { headers }) => {
-//   const userId = localStorage.getItem("userid");
-//   return {
-//     headers: {
-//       ...headers,
-//       userId: userId ? userId : "nope",
-//     },
-//   };
-// });
+const httpLink = new HttpLink({
+  uri: "https://cubechron-9b393b862959.herokuapp.com/api/graphql",
+  credentials: "include",
+});
+const authLink = setContext((_, { headers }) => {
+  const userId = localStorage.getItem("userid");
+  return {
+    headers: {
+      ...headers,
+      userId: userId ? userId : "nope",
+    },
+  };
+});
 
 const createApolloClient = () => {
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
     link: new HttpLink({
-      uri: "https://cubechron-9b393b862959.herokuapp.com/api/graphql",
+      uri: authLink.concat(httpLink),
     }),
     cache: new InMemoryCache({}),
   });
