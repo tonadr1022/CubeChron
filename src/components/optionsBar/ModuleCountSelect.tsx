@@ -20,7 +20,7 @@ const ModuleCountSelect = () => {
       <div className="dropdown dropdown-end ">
         <div
           tabIndex={0}
-          className="m-1 btn btn-xs bg-base-300"
+          className="m-1 btn btn-sm bg-base-300"
           // onClick={() => setOpen((prev) => !prev)}>
         >
           {moduleCount} <FaChevronDown />

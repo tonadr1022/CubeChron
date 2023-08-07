@@ -40,31 +40,24 @@ type Props = { solves: SolveFragment[]; elHeight?: number | null };
 const SolvesOverTime = ({ solves, elHeight }: Props) => {
   const reversed = useMemo(() => [...solves].reverse(), [solves]);
   return (
-    elHeight && (
-      <ResponsiveContainer
-        width={"100%"}
-        height={elHeight!}
-        className="bg-base-300 rounded-lg">
-        <LineChart data={reversed} className="-ml-4">
-          <Line
-            dot={false}
-            dataKey="duration"
-            stroke="#36d399"
-            strokeWidth={5}
-          />
-          <YAxis
-            tickCount={6}
-            padding={{ top: 0, bottom: 0 }}
-            style={{ margin: 1 }}
-            stroke={"#36d399"}
-            axisLine={false}
-            tickLine={false}
-            // tick={CustomYAxisTick}
-          />
-          <Tooltip content={<CustomTooltip />} />
-        </LineChart>
-      </ResponsiveContainer>
-    )
+    <ResponsiveContainer
+      width={"100%"}
+      height={elHeight || "100%"}
+      className="bg-base-300 rounded-lg">
+      <LineChart data={reversed} className="-ml-4">
+        <Line dot={false} dataKey="duration" stroke="#36d399" strokeWidth={5} />
+        <YAxis
+          tickCount={6}
+          padding={{ top: 0, bottom: 0 }}
+          style={{ margin: 1 }}
+          stroke={"#36d399"}
+          axisLine={false}
+          tickLine={false}
+          // tick={CustomYAxisTick}
+        />
+        <Tooltip content={<CustomTooltip />} />
+      </LineChart>
+    </ResponsiveContainer>
   );
 };
 

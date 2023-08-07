@@ -15,7 +15,7 @@ const ThemeMenuOption = ({
     <div
       className={clsx(
         "bg-base-300 rounded-lg p-2 text-center text-xs font-semibold cursor-pointer m-1",
-        active && "ring-2 ring-primary"
+        { "ring-2 ring-primary": active }
         // active && "border-primary border-2"
       )}
       onClick={() => handleClick(name)}>

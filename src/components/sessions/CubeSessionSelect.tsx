@@ -5,22 +5,21 @@ import {
 import { useUpdateSetting } from "@/hooks/settings/useUpdateSetting";
 import { useQuery } from "@apollo/client";
 import clsx from "clsx";
-import React, { useRef, useState } from "react";
-import { useOnClickOutside } from "usehooks-ts";
+import React, { useState } from "react";
 import Modal from "../common/Modal";
 import CreateCubeSessionForm from "./CreateCubeSessionForm";
 import { handleDropdownOptionClick } from "@/utils/handleDropdownOptionClick";
-import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
+import { useAppDispatch } from "@/hooks/reduxHooks";
 import { setTimerCanStart } from "@/redux/slices/timerSlice";
+import Loading from "../common/Loading";
 
 const CubeSessionSelect = () => {
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
-  const { timerCanStart } = useAppSelector((state) => state.timer);
   const { data, loading } = useQuery(CubeSessionsDocument);
   const { data: setting, loading: loading2 } = useQuery(SettingQueryDocument);
   const updateSetting = useUpdateSetting();
-  if (loading || loading2) return <div>loading</div>;
+  if (loading || loading2) return <Loading />;
   const { cubeSessions } = data!;
   const { cubeSessionId } = setting?.setting!;
   const handleClick = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
@@ -30,6 +29,7 @@ const CubeSessionSelect = () => {
     }
     handleDropdownOptionClick();
   };
+
   const handleSettingUpdate = (
     e: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => {
@@ -48,7 +48,7 @@ const CubeSessionSelect = () => {
   const active = cubeSessions.find((session) => session.id === cubeSessionId);
   return (
     <>
-      <div className={clsx("dropdown dropdown-end ")}>
+      <div className={clsx("dropdown ")}>
         <div
           tabIndex={0}
           className="m-1 btn btn-xs bg-base-300"

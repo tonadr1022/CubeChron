@@ -4,11 +4,8 @@ import PrismaPlugin from "@pothos/plugin-prisma";
 import { DateTimeResolver } from "graphql-scalars";
 import type PrismaTypes from "@pothos/plugin-prisma/generated";
 import prisma from "@/lib/prisma";
-import { initContextCache } from "@pothos/core";
-import { NextApiRequest, NextApiResponse } from "next";
-import { NextApiRequestCookies } from "next/dist/server/api-utils";
+import { NextApiRequest } from "next";
 import PrismaUtils from "@pothos/plugin-prisma-utils";
-import { PrismaCrudGenerator } from "@/graphql/generator";
 import { printSchema } from "graphql";
 import { writeFileSync } from "fs";
 import { resolve } from "path";
@@ -92,8 +89,8 @@ builder.prismaObject("CubeSession", {
       type: "DateTime",
       nullable: true,
     }),
-    name: t.exposeString("name", { nullable: true }),
-    cubeType: t.exposeString("cubeType", { nullable: true }),
+    name: t.exposeString("name"),
+    cubeType: t.exposeString("cubeType"),
     userId: t.exposeString("userId", { nullable: true }),
     user: t.relation("user"),
     notes: t.exposeString("notes", { nullable: true }),
@@ -260,7 +257,7 @@ builder.mutationType({
 
         return prisma.solve.update({
           ...query,
-          where: { id: id },
+          where: { id },
           data: { userId: ctx?.id, ...updateData },
         });
       },
@@ -291,17 +288,18 @@ builder.mutationType({
     updateCubeSession: t.prismaField({
       type: "CubeSession",
       args: {
+        id: t.arg.string({ required: true }),
         input: t.arg({ type: CubeSessionUpdateInput, required: true }),
       },
       resolve: (query, __, args, ctx) => {
-        const cubeSessionId = args.input.id;
-        const { id, ...data } = args.input;
+        const id = args.id;
+        const { ...data } = args.input;
         const updateData = Object.fromEntries(
           Object.entries(data).filter(([_, value]) => value !== undefined)
         );
         return prisma.cubeSession.update({
           ...query,
-          where: { id: cubeSessionId },
+          where: { id },
           data: { userId: ctx?.id, ...updateData },
         });
       },
@@ -340,22 +338,21 @@ writeFileSync(resolve(__dirname, "../schema.graphql"), printSchema(schema));
 
 export default createYoga<{ req: NextApiRequest }>({
   context: async (ctx) => {
-    console.log("ctx", ctx);
     const sessionToken = ctx.req.cookies["next-auth.session-token"];
     let decoded;
     if (ctx.req.headers["userid"]) {
-      console.log("context userid header", ctx.req.headers["userid"]);
+      // console.log("context userid header", ctx.req.headers["userid"]);
       return { id: ctx.req.headers["userid"] };
     } else {
       decoded = await decode({
         token: sessionToken,
         secret: process.env.NEXTAUTH_SECRET!,
       });
-      console.log("context", ctx);
-      console.log("context request cookies", ctx.req.cookies);
-      console.log("header cookie", ctx.req.headers.cookie);
-      console.log("weird", ctx.req.cookies["__Secure-next-auth.session-token"]);
-      console.log("decoded cookie", decoded);
+      // console.log("context", ctx);
+      // console.log("context request cookies", ctx.req.cookies);
+      // console.log("header cookie", ctx.req.headers.cookie);
+      // console.log("weird", ctx.req.cookies["__Secure-next-auth.session-token"]);
+      // console.log("decoded cookie", decoded);
       return { id: decoded?.id };
     }
   },

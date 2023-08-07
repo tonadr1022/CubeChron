@@ -5,11 +5,15 @@ import {
 } from "@/__generated__/graphql";
 import { CUBE_SESSION_FRAGMENT } from "@/graphql/fragments";
 import { useMutation } from "@apollo/client";
-export const useCreateCubeSession = () => {
+type Props = {
+  onCompleted?: (data: CreateCubeSessionMutation) => void;
+};
+export const useCreateCubeSession = ({ onCompleted }: Props) => {
   const [createCubeSessionMutation] = useMutation<CreateCubeSessionMutation>(
     CreateCubeSessionDocument,
     {
       update(cache, { data }) {
+        console.log("data deez", data);
         cache.modify({
           fields: {
             cubeSessions(existingSessions = []) {
@@ -22,10 +26,11 @@ export const useCreateCubeSession = () => {
           },
         });
       },
+      onCompleted,
     }
   );
+
   const createCubeSession = (input: CubeSessionInput) => {
-    console.log({ input });
     return createCubeSessionMutation({
       variables: {
         input,
@@ -37,6 +42,7 @@ export const useCreateCubeSession = () => {
             __typename: "CubeSession",
             id: "temp-id",
             name: input.name,
+            createdAt: new Date().toISOString(),
             cubeType: input.cubeType,
             notes: input.notes,
           },

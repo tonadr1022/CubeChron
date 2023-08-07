@@ -48,9 +48,10 @@ gql`
   query CubeSessions {
     cubeSessions {
       id
+      createdAt
       name
       notes
-      createdAt
+      cubeType
     }
   }
 `;

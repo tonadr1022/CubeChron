@@ -17,8 +17,8 @@ const SettingRow = ({
   return (
     <div className={clsx("flex pt-4", !flexRow && "flex-col")}>
       <div className="flex flex-col flex-1">
-        <h2 className="text-xl">{title}</h2>
-        <p className="prose text-xs">{description}</p>
+        <h2 className="text-2xl">{title}</h2>
+        <p className="prose text-sm">{description}</p>
       </div>
       <div>{children}</div>
     </div>

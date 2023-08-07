@@ -12,7 +12,7 @@ const CubeTypeSelect = () => {
   const { data: setting, loading: loading } = useQuery(SettingQueryDocument);
   if (loading) return <Loading />;
   // const cubeType = setting?.setting.cubeType!;
-  const cubeType = "333";
+  const cubeType = setting?.setting.cubeType;
   const handleSettingUpdate = (
     e: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => {
@@ -26,12 +26,8 @@ const CubeTypeSelect = () => {
 
   return (
     <>
-      <div className="dropdown dropdown-end ">
-        <div
-          tabIndex={0}
-          className="m-1 btn btn-xs bg-base-300"
-          // onClick={() => setOpen((prev) => !prev)}>
-        >
+      <div className="dropdown">
+        <div tabIndex={0} className="m-1 btn btn-xs bg-base-300">
           {CUBE_TYPE_OPTIONS[cubeType as keyof typeof CUBE_TYPE_OPTIONS]}
         </div>
         <ul

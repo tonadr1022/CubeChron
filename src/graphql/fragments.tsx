@@ -15,9 +15,9 @@ export const SOLVE_FRAGMENT = gql`
 export const CUBE_SESSION_FRAGMENT = gql`
   fragment CubeSession on CubeSession {
     id
+    createdAt
     name
     cubeType
     notes
-    createdAt
   }
 `;

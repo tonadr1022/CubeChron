@@ -15,6 +15,7 @@ gql`
     }
   }
 `;
+
 gql`
   mutation updateSolve($id: String!, $input: UpdateSolveInput!) {
     updateSolve(id: $id, input: $input) {
@@ -39,10 +40,26 @@ gql`
 gql`
   mutation createCubeSession($input: CubeSessionInput!) {
     createCubeSession(input: $input) {
+      ...CubeSession
+    }
+  }
+`;
+
+gql`
+  mutation updateCubeSession($id: String!, $input: CubeSessionUpdateInput!) {
+    updateCubeSession(id: $id, input: $input) {
       id
       name
       cubeType
       notes
+    }
+  }
+`;
+
+gql`
+  mutation deleteCubeSession($id: String!) {
+    deleteCubeSession(id: $id) {
+      id
     }
   }
 `;

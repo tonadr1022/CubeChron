@@ -40,7 +40,7 @@ const SettingsPage = () => {
         {menuOption === "Appearance" && <AppearanceOptions />}
         {menuOption === "Timer" && <TimerOptions />}
         {menuOption === "Data" && <DataOptions />}
-        <button className="btn mt-4" onClick={handleLogout}>
+        <button className="btn mt-40" onClick={handleLogout}>
           Logout
         </button>
         {/* <div>{session?.user?.name}</div>
