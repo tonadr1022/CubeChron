@@ -4,7 +4,6 @@ import { ScrambleDisplay } from "scramble-display";
 import { SettingQueryDocument } from "@/__generated__/graphql";
 import { useQuery } from "@apollo/client";
 import CubeDisplayToggle from "./CubeDisplayToggle";
-import { Visualization } from "scramble-display/dist/types/ScrambleDisplay";
 import Loading from "../common/Loading";
 
 type Props = {
@@ -21,6 +20,9 @@ const CubeDisplay = ({ elHeight }: Props) => {
   const cubeDisplayDimension = useAppSelector(
     (state) => state.cubeSetting.cubeDisplayDimension
   );
+
+  type Visualization = "3D" | "2D";
+
   useEffect(() => {
     if (cubeType && cubeDisplayDimension) {
       const el = new ScrambleDisplay();
