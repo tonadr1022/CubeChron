@@ -1,13 +1,11 @@
-"use client";
 import React from "react";
 import Scramble from "./ScrambleContainer";
 import Timer from "./Timer";
 
-type Props = {};
-
 const TimerScrambleContainer = () => {
   return (
-    <div className=" flex flex-col justify-center items-center text-center flex-1">
+    <div className="flex flex-col justify-center items-center text-center flex-1">
+      <h1>asd;lfkjasdf;lkj</h1>
       <Scramble />
       <Timer />
     </div>

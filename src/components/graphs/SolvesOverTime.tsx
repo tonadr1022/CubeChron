@@ -1,12 +1,8 @@
-import resolveConfig from "tailwindcss/resolveConfig";
-import tailwindConfig from "../../..//tailwind.config.js";
 import { SolveFragment } from "@/__generated__/graphql";
 import React, { useMemo } from "react";
 import {
   LineChart,
   Line,
-  CartesianGrid,
-  XAxis,
   YAxis,
   ResponsiveContainer,
   Tooltip,

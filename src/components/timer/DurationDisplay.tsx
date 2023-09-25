@@ -7,7 +7,6 @@ interface Props {
 }
 const DurationDisplay = ({ duration }: Props) => {
   const state = useAppSelector((state) => state.timer.timerState);
-
   const digits = state === "active" ? 1 : 2;
   return (
     <h2

@@ -21,10 +21,9 @@ const CubeDisplay = dynamic(() => import("../cubeDisplay/CubeDisplay"), {
 const RightSideBarSkeleton = () => {
   return (
     <>
-      <div className="w-full p-2 bg-base-200 flex flex-col overflow-y-auto h-1/3"></div>
-      <div className="placeholder-for-cube-display"></div>
-      <div className="placeholder-for-content"></div>
-      <div className="placeholder-for-footer"></div>
+      <div className="hidden md:flex md:flex-col p-2 box-content bg-base-200 w-64 justify-center items-center">
+        <Loading />
+      </div>
     </>
   );
 };
@@ -43,14 +42,10 @@ const RightSideBar = () => {
       setElHeight(containerRef.current!.offsetHeight / moduleCount);
     };
     // Attach the event listener
-    // if (typeof window !== "undefined") {
     window.addEventListener("resize", handleResize);
-    // }
     // Clean up the event listener on unmount
     return () => {
-      // if (typeof window !== "undefined") {
       window.removeEventListener("resize", handleResize);
-      // }
     };
   }, [containerRef, moduleCount]);
   const { solves, loading, error } = useSessionTypeSolves();
@@ -61,7 +56,6 @@ const RightSideBar = () => {
   if (loading) return <RightSideBarSkeleton />;
   if (error) return <div>Error</div>;
   return (
-    // <Suspense fallback={<Loading />}>
     <div
       className="hidden md:flex md:flex-col p-2 box-content bg-base-200 w-64"
       ref={containerRef}>

@@ -17,6 +17,7 @@ import { useCreateSolve } from "@/hooks/solves/useCreateSolve";
 import { addSolve } from "@/redux/slices/solvesSlice";
 import { useGetCubeSetting } from "@/hooks/settings/useGetCubeSetting";
 import ScrambleContainer from "./ScrambleContainer";
+
 const Timer = () => {
   const { isAuth } = useAppSelector((state) => state.user);
   const { timerState, timerTimeoutId, timerIntervalId, timerCanStart } =
@@ -105,7 +106,7 @@ const Timer = () => {
       <div
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
-        className=" flex flex-col justify-center items-center text-center flex-1">
+        className="flex flex-col justify-center items-center text-center flex-1">
         <ScrambleContainer />
         <DurationDisplay duration={duration} />
       </div>
