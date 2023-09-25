@@ -18,8 +18,9 @@ const CubeDisplay = ({ elHeight }: Props) => {
   const scramble = useAppSelector((state) => state.scramble.currentScramble);
   const scrambleRef = useRef<HTMLDivElement>(null);
   const cubeType = setting?.setting?.cubeType;
-  const cubeDisplayDimension = setting?.setting?.cubeDisplayDimension;
-
+  const cubeDisplayDimension = useAppSelector(
+    (state) => state.cubeSetting.cubeDisplayDimension
+  );
   useEffect(() => {
     if (cubeType && cubeDisplayDimension) {
       const el = new ScrambleDisplay();

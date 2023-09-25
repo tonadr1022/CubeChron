@@ -22,45 +22,48 @@ const LeftSideBarShell = ({ children }: Props) => {
   const dispatch = useAppDispatch();
   const { navCollapsed } = useAppSelector((state) => state.general);
   return (
-    <aside className="h-screen">
-      <nav
+    <nav
+      className={clsx(
+        "h-full flex flex-col bg-base-300 w-16",
+        !navCollapsed ? "md:w-56" : "md:w-16"
+      )}>
+      <div className="flex pt-4 justify-center">
+        <Image
+          src={"/pwa-512x512.png"}
+          alt="ChronoCube Logo"
+          width={30}
+          height={30}
+        />
+        {!navCollapsed && (
+          <span className="hidden md:flex pl-2 text-xl font-bold self-center">
+            CubeChron
+          </span>
+        )}
+      </div>
+      <ul
         className={clsx(
-          "h-full flex flex-col bg-base-300 ",
-          !navCollapsed ? "w-56" : "w-16"
+          "flex-1 pt-2 text-base-content flex flex-col items-center md:items-start",
+          navCollapsed && "md:items-center md:ml-0",
+          !navCollapsed && "md:ml-4"
         )}>
-        <div className="flex pt-4 justify-center">
-          <Image
-            src={"/pwa-512x512.png"}
-            alt="ChronoCube Logo"
-            width={20}
-            height={20}
-          />
-          {!navCollapsed && <span className="pl-2 font-bold">CubeChron</span>}
-        </div>
-        <ul
-          className={clsx(
-            "flex-1 pt-2 text-base-content flex flex-col",
-            navCollapsed && "items-center",
-            !navCollapsed && "ml-4"
-          )}>
-          {children}
-        </ul>
-        <div className="flex justify-center mb-10">
-          <button
-            className="absolute bottom-12 h-8"
-            onClick={() => dispatch(setNavCollapsed(!navCollapsed))}>
-            {navCollapsed ? (
-              <FaChevronRight />
-            ) : (
-              <div className="flex items-center">
-                <FaChevronLeft />
-                <span className="pl-2">Collapse</span>
-              </div>
-            )}
-          </button>
-        </div>
-      </nav>
-    </aside>
+        {children}
+      </ul>
+      <div className="flex justify-center mb-10">
+        <button
+          className="absolute bottom-12 h-8"
+          onClick={() => dispatch(setNavCollapsed(!navCollapsed))}>
+          {navCollapsed ? (
+            <FaChevronRight />
+          ) : (
+            <div className="hidden md:flex items-center">
+              <FaChevronLeft />
+              <span className="pl-2">Collapse</span>
+            </div>
+          )}
+        </button>
+      </div>
+    </nav>
+    // </aside>
   );
 };
 
@@ -91,10 +94,14 @@ export const SideBarItem = ({ icon, text, href }: SideBarItemProps) => {
       <Link
         href={href}
         className={clsx(
-          "flex items-center  opacity-50 hover:opacity-100 transition-opacity cursor-pointer"
+          "flex items-center opacity-50 hover:opacity-100 transition-opacity cursor-pointer"
         )}>
         {icon}
-        {!navCollapsed && <span className="pl-2">{text}</span>}
+        {!navCollapsed && (
+          <div className="hidden md:block">
+            <span className="pl-2">{text}</span>
+          </div>
+        )}
       </Link>
     </li>
   );

@@ -10,6 +10,7 @@ import ModuleSelect from "./ModuleSelect";
 import { useAppSelector } from "@/hooks/reduxHooks";
 import StatsModule from "../stats/StatsModule";
 import clsx from "clsx";
+import NoSolves from "../common/NoSolves";
 
 const SolveTableMemoized = React.memo(SolveTable);
 
@@ -64,28 +65,6 @@ const RightSideBar = () => {
     <div
       className="hidden md:flex md:flex-col p-2 box-content bg-base-200 w-64"
       ref={containerRef}>
-      {/* {moduleIndices.map((i) => (
-        <div
-          key={i}
-          className={clsx(
-            "h-full relative group my-2 rounded-lg",
-            modules[i] === "solves" && "overflow-y-auto"
-          )}>
-          {modules[i] === "timeGraph" && (
-            <SolvesOverTime elHeight={elHeight} solves={solves} />
-          )}
-          {modules[i] === "stats" && <StatsModule solves={solves} />}
-          {modules[i] === "solves" && (
-            <div className="h-full overflow-y-auto">
-              <SolveTableMemoized solves={solves} />
-            </div>
-          )}
-          {modules[i] === "cubeDisplay" && <CubeDisplay elHeight={elHeight} />}
-          <div className="top-0 left-0 z-50 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            <ModuleSelect moduleNumber={i} />
-          </div>
-        </div>
-      ))} */}
       {moduleIndices.map((i) => {
         return (
           <div
@@ -100,11 +79,7 @@ const RightSideBar = () => {
                 modules[i] !== "stats" &&
                 solves.length <= 0
               )
-                return (
-                  <div className="w-full h-full flex items-center justify-center bg-base-300 rounded-lg">
-                    No Solves to Display
-                  </div>
-                );
+                return <NoSolves />;
               switch (modules[i]) {
                 case "timeGraph":
                   return <SolvesOverTime elHeight={elHeight} solves={solves} />;

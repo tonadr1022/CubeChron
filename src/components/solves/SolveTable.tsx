@@ -1,23 +1,9 @@
-// import { Record } from "@/shared/types";
-// import { updateRecord, removeRecord } from "@/redux/recordsSlice";
-// import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-
-// import SolveTableRow from "@/components/solves/SolveTableRow";
-
-import { gql, useMutation, useQuery } from "@apollo/client";
 import SolveTableRow from "./SolveTableRow";
-import { useCallback, useMemo } from "react";
-import {
-  DeleteSolveDocument,
-  SettingQueryDocument,
-  Solve,
-  SolveFragment,
-  SolvesQueryDocument,
-  UpdateSolveDocument,
-} from "@/__generated__/graphql";
+import { useCallback } from "react";
+import { SolveFragment } from "@/__generated__/graphql";
 import { useDeleteSolve } from "@/hooks/solves/useDeleteSolve";
 import { useUpdateSolve } from "@/hooks/solves/useCreateSolve";
-import { getCubeSessionTypeSolves } from "@/data/getCubeSessionTypeSolves";
+import NoSolves from "../common/NoSolves";
 
 type Props = { solves: SolveFragment[] };
 
@@ -44,7 +30,7 @@ const SolveTable = ({ solves }: Props) => {
   );
   const length = solves.length ? solves?.length : 0;
   const counts = Array.from(Array(length).keys(), (i) => length - i);
-  return (
+  return solves.length ? (
     <div className="w-full p-2 flex flex-col bg-base-300 rounded-lg">
       {solves.map((solve, i) => (
         <SolveTableRow
@@ -57,6 +43,8 @@ const SolveTable = ({ solves }: Props) => {
         />
       ))}
     </div>
+  ) : (
+    <NoSolves />
   );
 };
 

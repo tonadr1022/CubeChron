@@ -28,7 +28,6 @@ const ScrambleContainer = React.memo(() => {
   }, [dispatch, cubeType, resetScramble]);
 
   if (loading) return <Loading />;
-  console.log("scramble container render");
   return scramble ? (
     <>
       <TextareaAutosize

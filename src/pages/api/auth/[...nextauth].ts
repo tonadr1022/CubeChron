@@ -110,7 +110,6 @@ export const authOptions: NextAuthOptions = {
           cubeSessions: true,
         },
       });
-      console.log({ u });
       return true;
     },
     session: ({ session, token }) => {

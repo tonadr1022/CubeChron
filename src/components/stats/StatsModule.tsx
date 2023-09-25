@@ -20,12 +20,11 @@ const StatModuleStat = ({ name, value }: StatProps) => {
         )}>
         {value ? value?.toFixed(2) : "-"}
       </button>
-      <div className="top-0 left-3 absolute text-[10px] font-medium">
-        {name}
-      </div>
+      <div className="top-0 left-3 absolute text-sm font-medium">{name}</div>
     </div>
   );
 };
+
 type Props = {
   solves: SolveFragment[];
 };

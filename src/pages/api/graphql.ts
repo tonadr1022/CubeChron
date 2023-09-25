@@ -179,7 +179,6 @@ export const CubeSessionUpdateInput = builder.inputType(
   "CubeSessionUpdateInput",
   {
     fields: (t) => ({
-      id: t.string({ required: true }),
       cubeType: t.string(),
       name: t.string(),
       notes: t.string(),
@@ -250,11 +249,9 @@ builder.mutationType({
       resolve: (query, __, args, ctx) => {
         const id = args.id;
         const { ...data } = args.input;
-        // Filter out any undefined fields from the input object
         const updateData = Object.fromEntries(
           Object.entries(data).filter(([_, value]) => value !== undefined)
         );
-
         return prisma.solve.update({
           ...query,
           where: { id },

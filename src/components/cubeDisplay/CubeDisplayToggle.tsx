@@ -1,12 +1,5 @@
-import {
-  SettingQueryDocument,
-  SettingQueryQuery,
-} from "@/__generated__/graphql";
 import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
-import { useGetCubeSetting } from "@/hooks/settings/useGetCubeSetting";
-import { useUpdateSetting } from "@/hooks/settings/useUpdateSetting";
 import { setCubeDisplayDimension } from "@/redux/slices/cubeSettingSlice";
-import { useQuery } from "@apollo/client";
 import React from "react";
 
 const options = ["2D", "3D"];

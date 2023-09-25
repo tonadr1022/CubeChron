@@ -1,5 +1,4 @@
-import { getSession, useSession } from "next-auth/react";
-import { GetServerSidePropsContext } from "next";
+import { useSession } from "next-auth/react";
 import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks";
 import RightSideBar from "@/components/layout/RightSideBar";
 import { Scrambow } from "scrambow";
@@ -11,7 +10,6 @@ import { setIsAuth } from "@/redux/slices/userSlice";
 import Link from "next/link";
 import Timer from "@/components/timer/Timer";
 import { useTheme } from "@/hooks/useTheme";
-import { serialize } from "cookie";
 
 const Home = () => {
   new Scrambow().get(1)[0].scramble_string;
@@ -51,12 +49,12 @@ const Home = () => {
           <div className="flex flex-col flex-1">
             <OptionsBar />
             <Timer />
-            {!focusMode && (
-              <div className="md:hidden">
-                <BottomBar />
-              </div>
-            )}
           </div>
+          {!focusMode && (
+            <div className="md:hidden">
+              <BottomBar />
+            </div>
+          )}
         </div>
       </>
       {/* ) : (

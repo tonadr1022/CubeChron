@@ -1,4 +1,4 @@
-export const CUBE_TYPE_OPTIONS = {
+export const CUBE_TYPE_OPTIONS: { [key: string]: string } = {
   "222": "2x2",
   "333": "3x3",
   "444": "4x4",

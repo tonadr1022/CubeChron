@@ -20,7 +20,7 @@ const documents = {
     "\n  mutation updateSolve($id: String!, $input: UpdateSolveInput!) {\n    updateSolve(id: $id, input: $input) {\n      ...Solve\n    }\n  }\n": types.UpdateSolveDocument,
     "\n  mutation updateSetting($input: UpdateSettingInput!) {\n    updateSetting(input: $input) {\n      id\n      focusMode\n      cubeType\n      barView\n      cubeDisplayDimension\n      cubeSessionId\n    }\n  }\n": types.UpdateSettingDocument,
     "\n  mutation createCubeSession($input: CubeSessionInput!) {\n    createCubeSession(input: $input) {\n      ...CubeSession\n    }\n  }\n": types.CreateCubeSessionDocument,
-    "\n  mutation updateCubeSession($id: String!, $input: CubeSessionUpdateInput!) {\n    updateCubeSession(id: $id, input: $input) {\n      id\n      name\n      cubeType\n      notes\n    }\n  }\n": types.UpdateCubeSessionDocument,
+    "\n  mutation updateCubeSession($id: String!, $input: CubeSessionUpdateInput!) {\n    updateCubeSession(id: $id, input: $input) {\n      id\n      name\n      createdAt\n      cubeType\n      notes\n    }\n  }\n": types.UpdateCubeSessionDocument,
     "\n  mutation deleteCubeSession($id: String!) {\n    deleteCubeSession(id: $id) {\n      id\n    }\n  }\n": types.DeleteCubeSessionDocument,
     "\n  query SolvesQuery {\n    solves {\n      createdAt\n      cubeSessionId\n      cubeType\n      dnf\n      duration\n      id\n      notes\n      plusTwo\n      scramble\n    }\n  }\n": types.SolvesQueryDocument,
     "\n  query Solve {\n    solve {\n      createdAt\n      cubeSessionId\n      cubeType\n      dnf\n      duration\n      id\n      notes\n      plusTwo\n      scramble\n    }\n  }\n": types.SolveDocument,
@@ -73,7 +73,7 @@ export function graphql(source: "\n  mutation createCubeSession($input: CubeSess
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation updateCubeSession($id: String!, $input: CubeSessionUpdateInput!) {\n    updateCubeSession(id: $id, input: $input) {\n      id\n      name\n      cubeType\n      notes\n    }\n  }\n"): (typeof documents)["\n  mutation updateCubeSession($id: String!, $input: CubeSessionUpdateInput!) {\n    updateCubeSession(id: $id, input: $input) {\n      id\n      name\n      cubeType\n      notes\n    }\n  }\n"];
+export function graphql(source: "\n  mutation updateCubeSession($id: String!, $input: CubeSessionUpdateInput!) {\n    updateCubeSession(id: $id, input: $input) {\n      id\n      name\n      createdAt\n      cubeType\n      notes\n    }\n  }\n"): (typeof documents)["\n  mutation updateCubeSession($id: String!, $input: CubeSessionUpdateInput!) {\n    updateCubeSession(id: $id, input: $input) {\n      id\n      name\n      createdAt\n      cubeType\n      notes\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

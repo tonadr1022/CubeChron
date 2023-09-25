@@ -13,7 +13,6 @@ export const useCreateCubeSession = ({ onCompleted }: Props) => {
     CreateCubeSessionDocument,
     {
       update(cache, { data }) {
-        console.log("data deez", data);
         cache.modify({
           fields: {
             cubeSessions(existingSessions = []) {

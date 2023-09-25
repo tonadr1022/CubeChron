@@ -16,12 +16,9 @@ import {
   ValueType,
   NameType,
 } from "recharts/types/component/DefaultTooltipContent";
-import { useAppSelector } from "../../hooks/reduxHooks";
+import NoSolves from "../common/NoSolves";
 
-const CustomTooltip = ({
-  active,
-  payload,
-}: TooltipProps<ValueType, NameType>) => {
+const CustomTooltip = ({ payload }: TooltipProps<ValueType, NameType>) => {
   if (!payload || !payload[0]) return null;
   const solve: SolveFragment = payload[0].payload;
   return (
@@ -39,13 +36,19 @@ type Props = { solves: SolveFragment[]; elHeight?: number | null };
 
 const SolvesOverTime = ({ solves, elHeight }: Props) => {
   const reversed = useMemo(() => [...solves].reverse(), [solves]);
-  return (
+  return solves.length ? (
     <ResponsiveContainer
       width={"100%"}
       height={elHeight || "100%"}
       className="bg-base-300 rounded-lg">
       <LineChart data={reversed} className="-ml-4">
-        <Line dot={false} dataKey="duration" stroke="#36d399" strokeWidth={5} />
+        <Line
+          isAnimationActive={false}
+          dot={false}
+          dataKey="duration"
+          stroke="#36d399"
+          strokeWidth={5}
+        />
         <YAxis
           tickCount={6}
           padding={{ top: 0, bottom: 0 }}
@@ -58,6 +61,8 @@ const SolvesOverTime = ({ solves, elHeight }: Props) => {
         <Tooltip content={<CustomTooltip />} />
       </LineChart>
     </ResponsiveContainer>
+  ) : (
+    <NoSolves />
   );
 };
 

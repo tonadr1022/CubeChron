@@ -22,7 +22,6 @@ const CubeSessionMenuItemOptions = ({ id, name }: Props) => {
         fields: {
           cubeSessions(existingSessions = [], { readField }) {
             return existingSessions.filter((sessionRef: any) => {
-              console.log("rf", readField("id", sessionRef));
               return deletedCubeSessionId !== readField("id", sessionRef);
             });
           },
@@ -58,14 +57,18 @@ const CubeSessionMenuItemOptions = ({ id, name }: Props) => {
     });
   };
   return (
-    <div className="dropdown dropdown-end">
+    <div
+      className="dropdown dropdown-end"
+      onClick={(e) => {
+        e.stopPropagation();
+      }}>
       <div tabIndex={0} className="m-1 btn btn-xs bg-base-300">
         <FaAngleDown />
       </div>
       <ul
         tabIndex={0}
         className={clsx(
-          "z-50 p-2 shadow menu dropdown-content bg-base-100 rounded-box w-40 max-h-64 overflow-y-auto block"
+          "p-2 shadow menu dropdown-content bg-base-100 rounded-box w-40 max-h-64 overflow-y-auto block z-50"
         )}>
         <li>
           <button onClick={handleSetActive}>Make Current</button>

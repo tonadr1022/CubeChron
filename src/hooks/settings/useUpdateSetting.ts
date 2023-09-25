@@ -13,7 +13,6 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 export const useUpdateSetting = () => {
   const [updateSettingMutation] = useMutation(UpdateSettingDocument, {
     update(cache, { data }) {
-      console.log({ data });
       cache.modify({
         fields: {
           settings(existingSettings = []) {

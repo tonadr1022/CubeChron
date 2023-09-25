@@ -1,6 +1,5 @@
 import { CubeSessionFragment } from "@/__generated__/graphql";
 import clsx from "clsx";
-import { FaAngleDown } from "react-icons/fa6";
 import CubeSessionMenuItemOptions from "./CubeSessionMenuItemOptions";
 
 type Props = {
@@ -18,7 +17,7 @@ const CubeSessionMenuItem = ({
   return (
     <div
       className={clsx(
-        "flex w-64 bg-base-300 p-4 rounded-lg items-center relative",
+        "cursor-pointer flex w-64 bg-base-300 p-4 rounded-lg items-center relative",
         { "ring-2 ring-primary": selected }
       )}
       onClick={() => setSelectedId(session.id)}>
@@ -36,9 +35,6 @@ const CubeSessionMenuItem = ({
         ).toLocaleDateString()}`}</p>
       </div>
       {!active && (
-        // <button className="btn btn-xs mr-1" onClick={() => console.log("open")}>
-        //   <FaAngleDown />
-        // </button>
         <CubeSessionMenuItemOptions name={session.name!} id={session.id} />
       )}
     </div>

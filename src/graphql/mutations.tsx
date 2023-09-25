@@ -50,6 +50,7 @@ gql`
     updateCubeSession(id: $id, input: $input) {
       id
       name
+      createdAt
       cubeType
       notes
     }

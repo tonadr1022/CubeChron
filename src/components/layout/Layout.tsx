@@ -1,34 +1,33 @@
 import { useAppSelector } from "@/hooks/reduxHooks";
 import LeftSideBar from "./LeftSideBar";
 import TopNavBar from "./TopNavBar";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Loading from "../common/Loading";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import clsx from "clsx";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { status } = useSession();
   const { focusMode } = useAppSelector((state) => state.general);
+  const [currentURL, setCurrentURL] = useState<string | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    setCurrentURL(router?.pathname);
+  }, [router.pathname]);
+
   return (
     <>
-      {/* <div className="drawer lg:drawer-open">
-        <input
-          id="left-sidebar-drawer"
-          type="checkbox"
-          className="drawer-toggle"
-        />
-        <div className="lg:hidden">Nav</div>
-        <main className=" drawer-content h-screen">{children}</main>
-        <LeftSideBar />
-      </div> */}
-      <div className="flex">
+      <div className={clsx("flex", { "h-screen": currentURL === "/" })}>
         {!focusMode && status === "authenticated" && (
-          <div className="hidden sm:flex">
+          <div className="hidden sm:flex h-screen sticky top-0 left-0">
             <LeftSideBar />
           </div>
         )}
-        <div className="w-full h-screen flex flex-col">
+        <div className="w-full flex flex-col h-full">
           {!focusMode && (
-            <div className="sm:hidden">
+            <div className="sm:hidden z-50 sticky top-0 left-0">
               <TopNavBar />
             </div>
           )}
