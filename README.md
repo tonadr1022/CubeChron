@@ -1,4 +1,4 @@
-# CubeChrono
+# CubeChron
 This is a web-based speedcubing timer designed with the motivation to synchronize speedcube timing across devices
 
 ## What it does
