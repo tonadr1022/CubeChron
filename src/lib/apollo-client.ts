@@ -50,8 +50,8 @@ export const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
 let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
 const httpLink = new HttpLink({
-  // uri: "https://cubechron-9b393b862959.herokuapp.com/api/graphql",
-  uri: "http://localhost:3000/api/graphql",
+  uri: "https://cubechron-9b393b862959.herokuapp.com/api/graphql",
+  // uri: "http://localhost:3000/api/graphql",
   credentials: "include",
 });
 const authLink = setContext((_, { headers }) => {
