@@ -19,6 +19,10 @@ This is a web-based speedcubing timer designed with the motivation to synchroniz
 ## Demo Video
 
 
+https://github.com/tonadr1022/CubeChron/assets/126039668/185f1921-d767-495d-9823-dfa77574499d
+
+
+
 ## TODO
 - Implement/finish cube sessions, stats, solves page
 - Expand user settings options
