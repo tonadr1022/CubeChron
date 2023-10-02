@@ -1,19 +1,26 @@
 # CubeChrono
+This is a web-based speedcubing timer designed with the motivation to synchronize speedcube timing across devices
 
-## Getting Started
+## What it does
+- Speedcube timer, with solves persisted on the site
+- Visualization and infomrational features include ube scramble display, summary statistics, time distribution graphs, and data export
+- Ability to create different cube sessions and separate solves by cube type
+- Supported scramble types include all WCA cube types
+
+## Tech Stack
+- Next.js full stack
+- GraphQL API endpoint with GraphQL Yoga
+- Apollo Client to interface with the GraphQL API
+- Redux Toolkit for state management
+- Tailwind CSS and Daisy-UI for UI components
+- NextAuth for user authentication
+- Type safety with TypeScript and GraphQL Codegen
+
+## Demo Video
 
 
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-## Deploy on Vercel
+## TODO
+- Implement/finish cube sessions, stats, solves page
+- Expand user settings options
+- Create new chart and data visualizations
+- Generate historical cubing statistics 
