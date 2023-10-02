@@ -1,8 +1,7 @@
 import { SolvesQueryDocument } from "@/__generated__/graphql";
 import Loading from "@/components/common/Loading";
 import TitleBar from "@/components/pages/TitleBar";
-import ViewOptions from "@/components/pages/stats/ViewOptions";
-import { CUBE_TYPE_OPTIONS } from "@/constants/constants";
+// import ViewOptions from "@/components/pages/stats/ViewOptions";
 import { getUniqueCubeTypes } from "@/utils/getUniqueCubeTypes";
 import { useQuery } from "@apollo/client";
 import clsx from "clsx";
@@ -26,7 +25,7 @@ const StatsPage = () => {
     <div className="p-6">
       <Toaster position="bottom-left" />
       <TitleBar title="Stats" />
-      <ViewOptions />
+      {/* <ViewOptions /> */}
     </div>
   );
 };
