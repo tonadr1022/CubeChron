@@ -1,6 +1,9 @@
 # CubeChron
 This is a web-based speedcubing timer designed with the motivation to synchronize speedcube timing across devices
 
+## [Site](https://www.cubechron.com)
+## [Demo](https://www.youtube.com/watch?v=oaQl6GGAVCw)
+
 ## What it does
 - Speedcube timer, with solves persisted on the site
 - Visualization and infomrational features include ube scramble display, summary statistics, time distribution graphs, and data export
